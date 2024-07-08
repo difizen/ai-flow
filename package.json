@@ -1,0 +1,96 @@
+{
+  "name": "@alipay/ai-workflow",
+  "version": "0.0.0",
+  "description": "A library project powered by bigfish-library",
+  "repository": {
+    "type": "git",
+    "url": "https://code.alipay.com/ai-platform/ai-workflow"
+  },
+  "author": "xujianfeng.xjf",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "icons",
+    "LEGAL.md",
+    "assets.json"
+  ],
+  "scripts": {
+    "build": "bigfish-lib build",
+    "build:watch": "bigfish-lib build -w",
+    "ci": "tnpm run lint && jest --coverage",
+    "cov": "jest --coverage",
+    "create": "bigfish-lib create",
+    "deploy": "bigfish-lib deploy",
+    "dev": "bigfish-lib doc dev",
+    "doctor": "bigfish-lib doctor",
+    "lint": "bigfish-lib lint",
+    "prepare": "bigfish-lib setup && husky install",
+    "prepublishOnly": "bigfish-lib prepublish",
+    "pull": "bigfish-lib pull",
+    "start": "tnpm run dev",
+    "test": "jest"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --cache --write --no-error-on-unmatched-pattern"
+    ],
+    "*.{js,jsx}": [
+      "bigfish-lib lint --fix --eslint-only",
+      "prettier --cache --write"
+    ],
+    "*.{css,less}": [
+      "bigfish-lib lint --fix --stylelint-only",
+      "prettier --cache --write"
+    ],
+    "*.{ts,tsx}": [
+      "bigfish-lib lint --fix --eslint-only",
+      "prettier --cache --parser=typescript --write"
+    ]
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.18.0",
+    "styled-components": "^6.0.7"
+  },
+  "devDependencies": {
+    "@ali/ci": "^4.26.0",
+    "@alipay/bigfish-library": "^4.0.0",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^13.0.0",
+    "@types/jest": "^29.4.0",
+    "@types/react": "^18.0.0",
+    "antd": "^5.0.0",
+    "husky": "^8.0.0",
+    "jest": "^29.4.3",
+    "jest-environment-jsdom": "^29.4.3",
+    "lint-staged": "^13.0.0",
+    "prettier": "^2.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "peerDependencies": {
+    "antd": "^5.0.0",
+    "react": ">=16.9.0"
+  },
+  "engines": {
+    "install-node": "16"
+  },
+  "publishConfig": {
+    "registry": "https://registry.antgroup-inc.cn"
+  },
+  "ci": {
+    "type": "aci"
+  },
+  "dumiAssets": "assets.json",
+  "yuyanId": "180020010101322476",
+  "tnpm": {
+    "mode": "npm"
+  }
+}
