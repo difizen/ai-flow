@@ -29,7 +29,7 @@
     "prepublishOnly": "bigfish-lib prepublish",
     "pull": "bigfish-lib pull",
     "start": "tnpm run dev",
-    "test": "jest"
+    "test": "jest --watch-all"
   },
   "commitlint": {
     "extends": [
@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.18.0",
+    "@types/json-schema": "^7.0.15",
     "styled-components": "^6.0.7"
   },
   "devDependencies": {
