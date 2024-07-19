@@ -29,6 +29,7 @@
     "prepublishOnly": "bigfish-lib prepublish",
     "pull": "bigfish-lib pull",
     "start": "tnpm run dev",
+    "tailwind": "bigfish g tailwindcss",
     "test": "jest --watch-all"
   },
   "commitlint": {
@@ -55,8 +56,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.18.0",
-    "@types/json-schema": "^7.0.15",
-    "styled-components": "^6.0.7"
+    "@xyflow/react": "^12.0.2",
+    "react-hotkeys-hook": "^4.5.0",
+    "short-unique-id": "^5.2.0",
+    "styled-components": "^6.0.7",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@ali/ci": "^4.26.0",
@@ -66,6 +70,7 @@
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^13.0.0",
     "@types/jest": "^29.4.0",
+    "@types/json-schema": "^7.0.15",
     "@types/react": "^18.0.0",
     "antd": "^5.0.0",
     "husky": "^8.0.0",
@@ -74,7 +79,8 @@
     "lint-staged": "^13.0.0",
     "prettier": "^2.0.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "tailwindcss": "^3"
   },
   "peerDependencies": {
     "antd": "^5.0.0",
@@ -90,8 +96,8 @@
     "type": "aci"
   },
   "dumiAssets": "assets.json",
-  "yuyanId": "180020010101322476",
   "tnpm": {
     "mode": "npm"
-  }
+  },
+  "yuyanId": "180020010101322476"
 }
