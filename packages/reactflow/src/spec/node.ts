@@ -12,8 +12,8 @@ export interface FlowNode {
   type: EType; //enum Type	节点类型
 
   position: Position;
-  width: number; //	number	节点宽度
-  height: number; //	number	节点高度
+  width?: number; //	number	节点宽度
+  height?: number; //	number	节点高度
 
   nodeType: NodeType;
 
@@ -234,6 +234,8 @@ export class StartNode implements FlowNode {
     this.height = node.height;
     this.nodeType = node.nodeType;
   }
+
+  toXYFlowJson() {}
 }
 
 // /**

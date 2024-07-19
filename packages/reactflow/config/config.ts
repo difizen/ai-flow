@@ -10,4 +10,5 @@ export default defineConfig({
       output: 'dist',
     },
   },
+  extraPostCSSPlugins: [require('tailwindcss')],
 });

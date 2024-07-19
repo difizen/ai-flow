@@ -10,7 +10,11 @@
     "declaration": true,
     "baseUrl": "./",
     "paths": {
-      "@@/*": [".dumi/tmp/*"]
-    }
+      "@@/*": [".dumi/tmp/*"],
+      "@/*": ["src/*"],
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "noUnusedLocals": true
   }
 }
