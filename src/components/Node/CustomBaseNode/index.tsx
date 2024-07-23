@@ -1,5 +1,5 @@
 import { ApiTwoTone } from '@ant-design/icons';
-import { Handle } from '@xyflow/react';
+import { Handle, Position } from '@xyflow/react';
 import React from 'react';
 import { NodeHeader } from './Header';
 import { NodeStatus } from './Status';
@@ -21,12 +21,12 @@ export const CustomBaseNode = ({ data }: Props) => {
       <NodeStatus status={'success' as any} runDuration={1020} />
       <Handle
         type="source"
-        position="left"
+        position={Position.Left}
         style={{ background: 'rgb(59 130 246)' }}
       />
       <Handle
         type="target"
-        position="right"
+        position={Position.Right}
         style={{ background: 'rgb(59 130 246)' }}
       />
       <NodeHeader name={data.name} icon={<ApiTwoTone />} />

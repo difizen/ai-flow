@@ -1,8 +1,16 @@
-# SchemaConfigForm
+---
+title: SchemaConfigForm
+group: { title: 'Schema', order: 1 }
+toc: menu
+order: 1
+demo: {
+  cols: 2
+}
+---
 
 ## 基础用法
 
-用于渲染jsonschema config的表单，传入一个FormSchema 
+用于渲染jsonschema config的表单，传入一个FormSchema
 
 ```jsx
 import React from 'react';
