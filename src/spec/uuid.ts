@@ -10,6 +10,10 @@ export class UUID {
 
   private _id = 0;
 
+  /**
+   * 返回一个数字id
+   * @returns
+   */
   uniqueID() {
     this._id += 1;
     return this._id.toString();

@@ -2,6 +2,7 @@
 import { defineConfig } from '@alipay/bigfish-library';
 
 export default defineConfig({
+  apiParser: {},
   // 这一层是 dumi（用于组件开发、Demo 编写）的配置项，请访问: https://d.umijs.org/config
   library: {
     // 以下是 father（用于组件源码构建）的配置项，请访问：https://github.com/umijs/father/blob/master/docs/config.md

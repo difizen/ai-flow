@@ -1,4 +1,4 @@
-import { FormSchema } from './node';
+import { FormSchema } from './FormSchema';
 
 describe('getSchemaByPoint', () => {
   it('基础路径 /', () => {
@@ -141,7 +141,13 @@ describe('getSchemaByPoint', () => {
 describe('addField', () => {
   it('添加表单field', () => {
     const input = new FormSchema();
-    input.addField('/', 'a', 'object', 'this is a', false);
+    input.addField({
+      pointer: '/', // 指定属性路径，如 /a/b
+      name: 'a',
+      type: 'object',
+      description: 'this is a',
+      required: false,
+    });
     const got = input.log();
     console.log(got, '==got');
     expect(got).toMatchSnapshot();
@@ -150,12 +156,42 @@ describe('addField', () => {
 
   it('添加表单field1', () => {
     const input = new FormSchema();
-    input.addField('/', 'a', 'object', 'this is a', false);
+    input.addField({
+      pointer: '/', // 指定属性路径，如 /a/b
+      name: 'a',
+      type: 'object',
+      description: 'this is a',
+      required: false,
+    });
     console.log(input.log(), 'log1');
-    input.addField('/a/b', 'b', 'string', 'this is desc', true);
-    input.addField('/a', 'subA', 'object', 'this is desc', true);
-    input.addField('/a/subA', 'aryC', 'array', 'this is desc', true);
-    input.addField('/', 'first', 'object', 'this is a', true);
+    input.addField({
+      pointer: '/a/b', // 指定属性路径，如 /a/b
+      name: 'b',
+      type: 'string',
+      description: 'this is desc',
+      required: true,
+    });
+    input.addField({
+      pointer: '/a', // 指定属性路径，如 /a/b
+      name: 'subA',
+      type: 'object',
+      description: 'this is desc',
+      required: true,
+    });
+    input.addField({
+      pointer: '/a/subA', // 指定属性路径，如 /a/b
+      name: 'aryC',
+      type: 'array',
+      description: 'this is desc',
+      required: true,
+    });
+    input.addField({
+      pointer: '/', // 指定属性路径，如 /a/b
+      name: 'first',
+      type: 'object',
+      description: 'this is a',
+      required: true,
+    });
     const got = input.log();
     console.log(got);
     expect(got).toMatchSnapshot();

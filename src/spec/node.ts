@@ -1,8 +1,4 @@
-import {
-  JSONSchema7,
-  JSONSchema7Definition,
-  JSONSchema7TypeName,
-} from 'json-schema';
+import { FormSchema } from './FormSchema';
 import { UUID } from './uuid';
 
 export interface FlowNode {
@@ -25,135 +21,6 @@ export interface FlowNode {
 interface Position {
   x: number;
   y: number;
-}
-
-/**
- * 声明输入的表单数据格式
- * 表单内容
- */
-export class FormSchema {
-  jsonschema: JSONSchema7 = {
-    type: 'object',
-    properties: {},
-    required: [],
-  };
-
-  /**
-   * 获取指定路径的属性
-   * 方便添加属性
-   * @param pointer
-   * @returns
-   */
-  getSchemaByPoint(pointer: string) {
-    if (pointer === '/') {
-      return this.jsonschema;
-    }
-
-    let pointers = pointer.split('/');
-    if (pointers[0] !== '') {
-      throw new Error('invalid pointer');
-    }
-    pointers = pointers.slice(1);
-
-    // base是一个object模式
-    let schema = this.jsonschema;
-    while (pointers.length > 0) {
-      const pointer = pointers.shift();
-      if (pointer === undefined) {
-        throw new Error('invalid pointer');
-      }
-      if (schema) {
-        if (schema.type === 'object') {
-          if (schema?.properties?.[pointer]) {
-            // 有就递归下沉
-            schema = schema.properties[pointer] as JSONSchema7;
-          } else {
-            // 没有属性就添加
-            schema!.properties![pointer] = {};
-            return schema!.properties![pointer];
-          }
-        } else if (schema?.type === 'array') {
-          return schema;
-        }
-      }
-    }
-    return schema;
-  }
-
-  /**
-   * 动态表单添加属性
-   * @param property
-   * @returns
-   */
-  addField = (
-    pointer: string, // 指定属性路径，如 /a/b
-    name: string,
-    type: JSONSchema7TypeName,
-    description: string,
-    required: boolean,
-  ) => {
-    if (typeof this.jsonschema !== 'boolean') {
-      const schema = this.getSchemaByPoint(pointer);
-      // console.log(schema, '==schema', pointer);
-      if (schema.type === 'array') {
-        // 如果存在属性
-        if (!schema?.items) {
-          schema.items = {
-            type: type,
-            description,
-          };
-        } else if (!Array.isArray(schema?.items)) {
-          const items = schema.items as JSONSchema7Definition;
-          schema.items = [
-            items,
-            {
-              type: type,
-              description,
-            },
-          ];
-        } else if (Array.isArray(schema?.items)) {
-          schema.items.push({
-            type: type,
-            description,
-          });
-        }
-      } else if (schema?.type === 'object') {
-        schema.properties![name] = {
-          type: type,
-          description,
-        };
-        if (type === 'object') {
-          schema.properties![name].properties = {};
-        }
-      } else {
-        schema.type = type;
-        schema.description = description;
-      }
-      if (required) {
-        // 如果是object的话，require在当前位置添加
-        if (schema.type === 'object') {
-          if (!schema.required) {
-            schema.required = [];
-          }
-          schema.required = [...schema.required, name];
-        } else {
-          // 在父级添加
-          const parentPointer = pointer.split('/').slice(0, -1).join('/');
-          const parentSchema = this.getSchemaByPoint(parentPointer);
-
-          if (!parentSchema.required) {
-            parentSchema.required = [];
-          }
-          parentSchema.required = [...parentSchema.required, name];
-        }
-      }
-    }
-    return false;
-  };
-
-  log() {
-    return JSON.stringify(this.jsonschema, null, 4);
-  }
 }
 
 // 不同类型的节点的基础类
@@ -228,7 +95,6 @@ export class StartNode implements FlowNode {
     this.type = node.type;
     this.description = node.description;
     this.input = node.input;
-    this.output = node.output;
     this.position = node.position;
     this.width = node.width;
     this.height = node.height;
