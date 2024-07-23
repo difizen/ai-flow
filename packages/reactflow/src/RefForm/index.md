@@ -1,6 +1,15 @@
-# RefForm
+---
+title: RefForm
+group: { title: 'Schema', order: 2 }
+toc: menu
+order: 1
+demo: {
+  cols: 2
+}
+---
 
 ## 基本用法
+
 > 渲染输入参数表单，支持传入节点引用数据
 
 ```jsx
@@ -22,6 +31,5 @@ startNode.input.updateSchema({
 
 export default () => <RefForm flowNodes={[startNode]}>Hi, bigfish</RefForm>;
 ```
-
 
 <API id="RefForm"></API>

@@ -27,7 +27,13 @@ const nodeTypes = {
   genericNode: CustomBaseNode,
 };
 
-function Flow() {
+interface FlowProps {
+  miniMap?: boolean;
+  classNames?: string;
+}
+
+function Flow(props: FlowProps) {
+  const { miniMap, classNames } = props;
   const position = useRef({ x: 0, y: 0 });
   const [lastSelection, setLastSelection] =
     useState<OnSelectionChangeParams | null>(null);
@@ -97,7 +103,7 @@ function Flow() {
 
   const onConnectMod = () => {};
   return (
-    <div style={{ height: '640px', width: '100%' }}>
+    <div style={{ height: '640px', width: '100%' }} className={classNames}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -108,9 +114,8 @@ function Flow() {
         nodeTypes={nodeTypes as any}
         disableKeyboardA11y={true}
       >
-        <Background className="" />
-        <MiniMap />
-
+        <Background />
+        {miniMap && <MiniMap />}
         <Controls></Controls>
       </ReactFlow>
     </div>
