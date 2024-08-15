@@ -3,6 +3,11 @@
  */
 
 import {
+  FormSchema,
+  OrderJSONSchema7,
+  variableTypeOptions,
+} from '@/FormSchema';
+import {
   AppstoreAddOutlined,
   CaretRightOutlined,
   MinusCircleOutlined,
@@ -20,11 +25,11 @@ import {
 import { JSONSchema7 } from 'json-schema';
 import React, { useState } from 'react';
 
-import {
-  FormSchema,
-  OrderJSONSchema7,
-  variableTypeOptions,
-} from '../spec/FormSchema';
+// import {
+//   FormSchema,
+//   OrderJSONSchema7,
+//   variableTypeOptions,
+// } from '../spec/FormSchema';
 
 const useForceUpdate = () => {
   const [forceKey, update] = useState(0);
@@ -34,8 +39,11 @@ const useForceUpdate = () => {
   return { forceUpdate, forceKey };
 };
 
-export const SchemaConfigForm = (props: { formSchema: FormSchema }) => {
-  const { formSchema } = props;
+export const SchemaConfigForm = (props: {
+  formSchema: FormSchema;
+  showRequired?: boolean;
+}) => {
+  const { formSchema, showRequired = false } = props;
 
   const jsonschema = formSchema.jsonschema;
   const { forceUpdate } = useForceUpdate();
@@ -138,27 +146,29 @@ export const SchemaConfigForm = (props: { formSchema: FormSchema }) => {
               }}
             />
           </Form.Item>
-          <Form.Item
-            label="是否必选"
-            name={'variableRequired' + '-' + pointer}
-            // initialValue={required.includes(key)}
-          >
-            <Checkbox
-              defaultChecked={required?.includes(variableName)}
-              value="A"
-              onMouseLeave={forceUpdate}
-              style={{ lineHeight: '32px' }}
-              onChange={(v) => {
-                formSchema.updateField({
-                  pointer: parentPointer,
-                  key: 'required',
-                  value: v.target.checked,
-                  currentVariableName: variableName,
-                });
-              }}
-            ></Checkbox>
-          </Form.Item>
-          <MinusCircleOutlined onClick={() => {}} />
+          {showRequired && (
+            <Form.Item
+              label="是否必选"
+              name={'variableRequired' + '-' + pointer}
+              // initialValue={required.includes(key)}
+            >
+              <Checkbox
+                defaultChecked={required?.includes(variableName)}
+                value="A"
+                onMouseLeave={forceUpdate}
+                style={{ lineHeight: '32px' }}
+                onChange={(v) => {
+                  formSchema.updateField({
+                    pointer: parentPointer,
+                    key: 'required',
+                    value: v.target.checked,
+                    currentVariableName: variableName,
+                  });
+                }}
+              ></Checkbox>
+            </Form.Item>
+          )}
+          {/* <MinusCircleOutlined onClick={() => {}} /> */}
         </Space>
       );
     };
@@ -216,7 +226,7 @@ export const SchemaConfigForm = (props: { formSchema: FormSchema }) => {
                   }),
                 },
               ]}
-              style={{ background: token.colorBgContainer, minWidth: 772 }}
+              style={{ background: token.colorBgContainer }}
             ></Collapse>
           </div>
         );
@@ -359,7 +369,7 @@ export const SchemaConfigForm = (props: { formSchema: FormSchema }) => {
   };
 
   return (
-    <Space align="start">
+    <Space direction="vertical">
       <Space direction="vertical">
         {renderField(jsonschema, '/', jsonschema.required, false, true)}
       </Space>

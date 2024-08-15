@@ -1,10 +1,10 @@
+import { UUID } from '@/spec/uuid';
 import { message } from 'antd';
 import {
   JSONSchema7,
   JSONSchema7Definition,
   JSONSchema7TypeName,
 } from 'json-schema';
-import { UUID } from '../uuid';
 
 export type OrderJSONSchema7 = JSONSchema7 & {
   order: number;
@@ -30,6 +30,9 @@ export class FormSchema {
     required: [],
   };
 
+  constructor(schema: JSONSchema7) {
+    Object.assign(this.jsonschema, schema);
+  }
   /**
    * 获取指定路径的属性
    * 方便添加属性
