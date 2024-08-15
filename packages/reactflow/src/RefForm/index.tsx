@@ -1,3 +1,4 @@
+import { NodeDataType } from '@/interfaces/flow';
 import { CaretRightOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   theme,
 } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlowNode } from '../spec/node';
 
 interface CascaderOptions {
   value: string;
@@ -21,14 +21,20 @@ interface CascaderOptions {
 /**
  * 把jsonschema 转成cascader的options
  */
-const getCascaderOptions = (node: FlowNode) => {
-  const jsonSchema = node.input?.jsonschema;
+const getCascaderOptions = (node: NodeDataType) => {
+  const jsonSchema = node.config?.inputs?.jsonschema;
+  console.log('🚀 ~ getCascaderOptions ~ jsonSchema:', jsonSchema);
   const options: CascaderOptions[] = [
-    { label: `${node.name}`, value: node.name, children: [] },
+    {
+      label: `${node.nodeMeta.title}`,
+      value: node.nodeMeta?.title,
+      children: [],
+    },
   ];
 
   // 递归解析JSONSchema
   const parseSchema = (schema: any): CascaderOptions[] => {
+    console.log('🚀 ~ parseSchema ~ schema:', schema);
     const parsedOptions: CascaderOptions[] = [];
 
     for (const key in schema.properties) {
@@ -93,7 +99,7 @@ interface ParameterValue {
 }
 
 const Parameter = (props: {
-  flowNodes?: FlowNode[];
+  flowNodes?: NodeDataType[];
   onChange?: (values: ParameterValue) => void;
   values?: ParameterValue;
 }) => {
@@ -137,6 +143,7 @@ const Parameter = (props: {
         }}
       />
       <Select
+        className="noflow nowheel nopan nodelete nodrag"
         value={value.variableType}
         onChange={(v) => {
           setValue((s) => {
@@ -160,8 +167,10 @@ const Parameter = (props: {
       ></Select>
       {value.variableType === 'ref' ? (
         <Cascader
+          className="noflow nowheel nopan nodelete nodrag"
           options={options}
           onChange={(v) => {
+            console.log('🚀 ~ v:', v);
             setValue((s) => {
               return {
                 ...s,
@@ -193,7 +202,7 @@ const Parameter = (props: {
  * @returns
  */
 export const RefForm = (props: {
-  flowNodes?: FlowNode[];
+  flowNodes?: NodeDataType[];
   values?: ParameterValue[];
   onChange?: (values: ParameterValue[]) => void;
 }) => {

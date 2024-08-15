@@ -17,7 +17,7 @@ import React from 'react';
 import { RefForm, FormSchema, StartNode } from '@alipay/ai-workflow';
 
 const startNode = new StartNode()
-startNode.config.inputs.updateSchema({
+startNode.input.updateSchema({
   type: 'object',
   properties: {
     name: {

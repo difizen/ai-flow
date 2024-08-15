@@ -1,6 +1,8 @@
 export { default as Flow } from './components/Flow';
+export { FlowWithPanel } from './components/FlowWithPanel';
+export { FormSchema } from './FormSchema';
 export { RefForm } from './RefForm';
 export { SchemaConfigForm } from './SchemaConfigForm';
-export { FormSchema } from './spec/FormSchema';
 export { StartNode } from './spec/node';
+export * from './utils';
 import './tailwind.css';
