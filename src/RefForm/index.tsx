@@ -23,7 +23,7 @@ interface CascaderOptions {
  */
 const getCascaderOptions = (node: NodeDataType) => {
   const jsonSchema = node.config?.inputs?.jsonschema;
-  console.log('🚀 ~ getCascaderOptions ~ jsonSchema:', jsonSchema);
+
   const options: CascaderOptions[] = [
     {
       label: `${node.name}`,
@@ -34,7 +34,6 @@ const getCascaderOptions = (node: NodeDataType) => {
 
   // 递归解析JSONSchema
   const parseSchema = (schema: any): CascaderOptions[] => {
-    console.log('🚀 ~ parseSchema ~ schema:', schema);
     const parsedOptions: CascaderOptions[] = [];
 
     for (const key in schema.properties) {
@@ -170,7 +169,6 @@ const Parameter = (props: {
           className="noflow nowheel nopan nodelete nodrag"
           options={options}
           onChange={(v) => {
-            console.log('🚀 ~ v:', v);
             setValue((s) => {
               return {
                 ...s,

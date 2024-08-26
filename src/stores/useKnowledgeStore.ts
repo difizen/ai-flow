@@ -11,7 +11,7 @@ export interface KnowledgeStoreType {
   setKnowledges: (knowledges: Knowledge[]) => void;
 }
 
-export const useKnowledgeStore = create<KnowledgeStoreType>((set, get) => ({
+export const useKnowledgeStore = create<KnowledgeStoreType>((set) => ({
   knowledges: [],
   setKnowledges: (knowledges: Knowledge[]) => {
     set({ knowledges });

@@ -29,9 +29,6 @@ export const NodeWrapper = (props: {
     rightHandlerConfig,
   } = props;
   const { name, description, icon } = nodeProps.data;
-  console.log('🚀 ~ nodeProps.selected:', nodeProps.selected);
-  // const runRes = {};
-  // const validationStatus = true;
 
   return (
     <div

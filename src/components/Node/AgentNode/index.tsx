@@ -18,7 +18,6 @@ export const AgentNode = (props: Props) => {
   // const { config } = data;
   const { findUpstreamNodes } = useFlowStore();
   const upstreamNodes = findUpstreamNodes(data.id.toString());
-  console.log('🚀 ~ AgentNode ~ upstreamNodes:', upstreamNodes);
 
   return (
     <NodeWrapper nodeProps={props}>
