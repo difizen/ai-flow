@@ -1,5 +1,6 @@
 import { ReferenceForm } from '@/components/ReferenceForm';
-import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
+import { NodeDataType } from '@/interfaces/flow';
+import { useFlowStore } from '@/stores/useFlowStore';
 import { Collapse } from 'antd';
 import React from 'react';
 import { NodeWrapper } from '../NodeWrapper';
@@ -12,41 +13,17 @@ type Props = {
 };
 
 export const EndNode = (props: Props) => {
-  // const { data } = props;
-  // const {  config } = data;
+  const { data } = props;
+  const { findUpstreamNodes } = useFlowStore();
+  const upstreamNode = findUpstreamNodes(data.id.toString());
 
   return (
     <NodeWrapper nodeProps={props} rightHandler={false}>
       <Collapse>
         <ReferenceForm
           label="输入变量"
-          nodes={[
-            {
-              id: 'node-1',
-              type: 'start',
-              data: {
-                id: 'node-1',
-                type: NodeTypeEnum.LLM,
-
-                name: '开始',
-                icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png',
-                description: '工作流的起始节点，用于设定启动工作流需要的信息',
-
-                config: {
-                  outputs: [
-                    {
-                      type: 'string',
-                      name: 'BOT_USER_INPUT',
-                      required: false,
-                      description: '用户本轮对话输入内容',
-                    },
-                  ],
-                },
-              },
-              position: { x: 250, y: 50 },
-            },
-          ]}
-          values={[{ name: 'output', type: 'ref' }]}
+          nodes={[...(upstreamNode as any)]}
+          values={[{ name: 'output', type: 'reference' }]}
           onChange={(values) => {
             console.log('ReferenceForm', values);
           }}

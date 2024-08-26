@@ -1,6 +1,7 @@
 import { SelectInNode } from '@/components/AIBasic/SelectInNode';
 import { ReferenceSelect } from '@/components/ReferenceSelect';
 import { NodeDataType } from '@/interfaces/flow';
+import { useFlowStore } from '@/stores/useFlowStore';
 import { Form } from 'antd';
 import React from 'react';
 import { NodeWrapper } from '../NodeWrapper';
@@ -13,8 +14,24 @@ type Props = {
 };
 
 export const IfElseNode = (props: Props) => {
+  const { data } = props;
   const [form] = Form.useForm();
   const compare = Form.useWatch('compare', form);
+  const { findUpstreamNodes } = useFlowStore();
+  const upstreamNode = findUpstreamNodes(data.id.toString());
+  const options = upstreamNode.map((node) => {
+    return {
+      label: node.data.name,
+      value: node.data.id,
+      children:
+        node.data?.config?.outputs?.map((output) => {
+          return {
+            label: output.name,
+            value: output.name,
+          };
+        }) || [],
+    };
+  });
   return (
     <NodeWrapper
       nodeProps={props}
@@ -29,7 +46,7 @@ export const IfElseNode = (props: Props) => {
             <div className="ml-1 mb-2 font-medium">如果</div>
             <Form form={form} layout="inline">
               <Form.Item name="left">
-                <ReferenceSelect refOptions={[]} />
+                <ReferenceSelect refOptions={options} />
               </Form.Item>
               <Form.Item name="compare">
                 <SelectInNode
@@ -44,7 +61,7 @@ export const IfElseNode = (props: Props) => {
               </Form.Item>
               {compare !== 'blank' && (
                 <Form.Item name="right">
-                  <ReferenceSelect refOptions={[]} />
+                  <ReferenceSelect refOptions={options} />
                 </Form.Item>
               )}
             </Form>

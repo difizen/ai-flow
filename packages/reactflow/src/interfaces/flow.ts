@@ -24,7 +24,7 @@ export interface LiteralValueType {
 }
 
 export interface RefValueType {
-  type: 'ref';
+  type: 'reference';
   content?: {
     source: string;
     blockID: string;
@@ -42,22 +42,19 @@ export interface BasicSchema {
   description?: string;
 }
 
-export interface InputSchema {
-  name: string;
-  input: BasicSchema;
-}
-
 export interface NodeDataConfigType {
-  params?: InputSchema[];
-  inputs?: InputSchema[];
+  inputs?: {
+    input_param: BasicSchema[];
+    [key: string]: BasicSchema[];
+  };
   outputs?: BasicSchema[];
 }
 
-export interface NodeDataMetaType {
-  name: string;
-  icon?: string;
-  description?: string;
-}
+// export interface NodeDataMetaType {
+//   name: string;
+//   icon?: string;
+//   description?: string;
+// }
 
 export interface NodeDataType {
   id: string | number;

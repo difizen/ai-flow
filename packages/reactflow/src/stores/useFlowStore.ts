@@ -46,7 +46,7 @@ interface FlowStoreType {
   getFlow: () => { nodes: Node[]; edges: Edge[]; viewport: Viewport };
   paste: any;
 
-  findUpstreamNodes: (id: string) => void;
+  findUpstreamNodes: (id: string) => Node[];
 }
 
 export const useFlowStore = create<FlowStoreType>((set, get) => {
@@ -55,13 +55,13 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
     nodes: Node[],
     edges: Edge[],
     targetNode: string,
-  ): number[] => {
+  ): Node[] => {
     const adjList: AdjacencyList = {};
     nodes.forEach((node) => {
       adjList[node.id] = [];
     });
     edges.forEach((edge) => {
-      adjList[edge.target].push(edge.source);
+      adjList[edge.source].push(edge.target);
     });
 
     const visited = new Set<string>();
@@ -79,8 +79,12 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       }
     };
 
+    console.log('🚀 ~ useFlowStore ~ nodes:', nodes, edges, targetNode);
+    console.log('🚀 ~ adjList', adjList);
+
     dfs(targetNode);
-    return Array.from(result);
+    console.log('🚀 ~ result', result);
+    return get().nodes.filter((node) => Array.from(result).includes(node.id));
   };
 
   return {
