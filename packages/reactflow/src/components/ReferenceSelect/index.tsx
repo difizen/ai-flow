@@ -5,33 +5,33 @@ import { SelectInNode } from '../AIBasic/SelectInNode';
 
 export const ReferenceSelect = (props: {
   value?: {
-    type: 'ref' | 'value';
+    type: 'reference' | 'value';
     content?: string;
   };
-  onChange?: (value: { type: 'ref' | 'value'; content?: string }) => void;
+  onChange?: (value: { type: 'reference' | 'value'; content?: string }) => void;
   refOptions: { label: string; content: string }[];
 }) => {
   const { value, onChange, refOptions } = props;
-  console.log('🚀 ~ value:', value);
 
   return (
     <div className="flex gap-2">
       <SelectInNode
-        defaultValue={value?.type || 'ref'}
-        style={{ width: 120 }}
+        defaultValue={value?.type || 'reference'}
+        style={{ width: 80 }}
         onChange={(val) =>
           onChange?.({
             type: val,
           })
         }
         options={[
-          { label: 'ref', value: 'ref' },
-          { label: 'value', value: 'value' },
+          { label: '引用', value: 'reference' },
+          { label: '值', value: 'value' },
         ]}
       />
 
-      {value?.type !== 'ref' ? (
+      {value?.type === 'value' ? (
         <Input
+          style={{ width: 120 }}
           onChange={(e) =>
             onChange?.({
               type: value.type,

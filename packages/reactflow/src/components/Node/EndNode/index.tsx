@@ -1,4 +1,4 @@
-import { RefrenceForm } from '@/components/ReferenceForm';
+import { ReferenceForm } from '@/components/ReferenceForm';
 import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
 import { Collapse } from 'antd';
 import React from 'react';
@@ -18,7 +18,7 @@ export const EndNode = (props: Props) => {
   return (
     <NodeWrapper nodeProps={props} rightHandler={false}>
       <Collapse>
-        <RefrenceForm
+        <ReferenceForm
           label="输入变量"
           nodes={[
             {
@@ -48,7 +48,7 @@ export const EndNode = (props: Props) => {
           ]}
           values={[{ name: 'output', type: 'ref' }]}
           onChange={(values) => {
-            console.log('RefrenceForm', values);
+            console.log('ReferenceForm', values);
           }}
         />
       </Collapse>

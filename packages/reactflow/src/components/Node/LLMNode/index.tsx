@@ -2,7 +2,7 @@ import { CollapseWrapper } from '@/components/AIBasic/CollapseWrapper';
 import { OutputString } from '@/components/AIBasic/OutputVariableTree/OutputString';
 import PromptEditor from '@/components/AIBasic/PromptEditor';
 import { SelectInNode } from '@/components/AIBasic/SelectInNode';
-import { RefrenceForm } from '@/components/ReferenceForm';
+import { ReferenceForm } from '@/components/ReferenceForm';
 import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
 import React, { useState } from 'react';
 import { NodeWrapper } from '../NodeWrapper';
@@ -36,7 +36,7 @@ export const LLMNode = (props: Props) => {
         />
         {/* Part2 Ref Form */}
 
-        <RefrenceForm
+        <ReferenceForm
           label="输入变量"
           dynamic
           nodes={[
@@ -68,12 +68,12 @@ export const LLMNode = (props: Props) => {
               name: 'output',
               type: 'string',
               value: {
-                type: 'ref',
+                type: 'reference',
               },
             },
           ]}
           onChange={(values) => {
-            console.log('RefrenceForm', values);
+            console.log('ReferenceForm', values);
           }}
         />
         {/* Part3 PromptEditor */}
