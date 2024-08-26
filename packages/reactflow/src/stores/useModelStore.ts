@@ -21,7 +21,7 @@ export interface ModelStoreType {
   setModelConfig: (config: ModelConfig) => void;
 }
 
-export const useModelStore = create<ModelStoreType>((set, get) => ({
+export const useModelStore = create<ModelStoreType>((set) => ({
   models: [],
   setModels: (models: Model[]) => {
     set({ models });

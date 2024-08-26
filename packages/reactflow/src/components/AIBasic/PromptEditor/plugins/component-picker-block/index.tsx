@@ -68,17 +68,14 @@ const ComponentPicker = ({
     [editor],
   );
 
-  const handleSelectWorkflowVariable = useCallback(
-    (variables: string[]) => {
-      editor.update(() => {
-        const needRemove = $splitNodeContainingQuery(
-          checkForTriggerMatch(triggerString, editor)!,
-        );
-        if (needRemove) needRemove.remove();
-      });
-    },
-    [editor, checkForTriggerMatch, triggerString],
-  );
+  const handleSelectWorkflowVariable = useCallback(() => {
+    editor.update(() => {
+      const needRemove = $splitNodeContainingQuery(
+        checkForTriggerMatch(triggerString, editor)!,
+      );
+      if (needRemove) needRemove.remove();
+    });
+  }, [editor, checkForTriggerMatch, triggerString]);
 
   const renderMenu = useCallback<MenuRenderFn<PickerBlockMenuOption>>(
     (

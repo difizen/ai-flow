@@ -213,7 +213,6 @@ export const FlowWithPanel = () => {
   (yaml_data as Record<string, any>[]).forEach((item) => {
     NodeSchemaParser(item);
   });
-  console.log('🚀 ~ yaml_data:', yaml_data);
 
   // const setNodes = useFlowStore((state) => state.setNodes);
   // const reactFlowInstance = useFlowStore((state) => state.reactFlowInstance);

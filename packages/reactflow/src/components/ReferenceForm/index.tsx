@@ -21,7 +21,6 @@ export const ReferenceForm = (props: RefrenceFormProps) => {
   useEffect(() => {
     form.setFieldValue('variables', values);
   }, []);
-  console.log('🚀 ~ useEffect ~ values:', values);
 
   const options = nodes.map((node) => {
     return {
@@ -44,7 +43,6 @@ export const ReferenceForm = (props: RefrenceFormProps) => {
           form={form}
           autoComplete="off"
           onValuesChange={(_, allFields) => {
-            console.log('🚀 ~ form.validateFields ~ allFields:', allFields);
             form.validateFields().then(() => {
               if (allFields.variables)
                 onChange(

@@ -122,6 +122,7 @@ export function registerLexicalTextEntity<T extends TextNode>(
       replacementNode.setFormat(nodeToReplace.getFormat());
       nodeToReplace.replace(replacementNode);
 
+      // eslint-disable-next-line eqeqeq
       if (currentNode == null) return;
     }
   };

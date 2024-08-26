@@ -10,6 +10,7 @@ export class CustomTextNode extends TextNode {
     return new CustomTextNode(node.__text, node.__key);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(text: string, key?: NodeKey) {
     super(text, key);
   }

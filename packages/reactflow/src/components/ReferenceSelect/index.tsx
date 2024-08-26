@@ -15,7 +15,6 @@ export const ReferenceSelect = (props: {
   refOptions: { label: string; content: string }[];
 }) => {
   const { value, onChange, refOptions } = props;
-  console.log('🚀 ~ value:', value);
 
   return (
     <div className="flex gap-2">

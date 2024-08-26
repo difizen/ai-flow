@@ -20,8 +20,6 @@ type Props = {
 
 export const LLMNode = (props: Props) => {
   const { data } = props;
-  // console.log('🚀 ~ LLMNode ~ data:', data);
-  // const { config } = data;
 
   const { findUpstreamNodes } = useFlowStore();
   const upstreamNode = findUpstreamNodes(data.id.toString());
@@ -101,7 +99,7 @@ export const LLMNode = (props: Props) => {
         {/* Part4 Outputer */}
         <CollapseWrapper
           className="mt-3"
-          label={'Prompt'}
+          label={'Output'}
           content={
             <>
               {(data.config?.outputs || []).map((output) => (
