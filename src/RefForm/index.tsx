@@ -26,8 +26,8 @@ const getCascaderOptions = (node: NodeDataType) => {
   console.log('🚀 ~ getCascaderOptions ~ jsonSchema:', jsonSchema);
   const options: CascaderOptions[] = [
     {
-      label: `${node.nodeMeta.title}`,
-      value: node.nodeMeta?.title,
+      label: `${node.name}`,
+      value: node?.name,
       children: [],
     },
   ];

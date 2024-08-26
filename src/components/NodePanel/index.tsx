@@ -39,9 +39,7 @@ export const NodesPanel = (props: NodesPanelProps) => {
         <Input.Search
           placeholder="Search"
           onChange={(e) => {
-            nodes.filter((node) =>
-              node.nodeMeta.title.includes(e.target.value),
-            );
+            nodes.filter((node) => node.name.includes(e.target.value));
           }}
         />
       )}
@@ -62,8 +60,8 @@ export const NodesPanel = (props: NodesPanelProps) => {
             );
           }}
         >
-          <img src={node.nodeMeta.icon} className="h-8 rounded p-1" />
-          <div className="ml-3 font-semibold">{node.nodeMeta.title}</div>
+          {node.icon && <img src={node.icon} className="h-8 rounded p-1" />}
+          <div className="ml-3 font-semibold">{node.name}</div>
         </div>
       ))}
       <></>

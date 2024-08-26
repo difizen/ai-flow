@@ -1,9 +1,4 @@
-import {
-  BaseEdge,
-  EdgeLabelRenderer,
-  EdgeProps,
-  getBezierPath,
-} from '@xyflow/react';
+import { BaseEdge, EdgeProps, getBezierPath, MarkerType } from '@xyflow/react';
 import React from 'react';
 
 export default function CustomEdge({
@@ -19,7 +14,7 @@ export default function CustomEdge({
   selected,
 }: EdgeProps) {
   // const { setNodes } = useReactFlow();
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const [edgePath] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -31,11 +26,18 @@ export default function CustomEdge({
   // const onEdgeClick = () => {
   //   Modal.Open(<div>addNode</div>);
   // };
-
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
-      {selected && (
+      <BaseEdge
+        path={edgePath}
+        markerEnd={MarkerType.ArrowClosed}
+        style={{
+          ...style,
+          stroke: selected ? 'rgb(29 78 216)' : 'rgb(156 163 175)',
+          strokeWidth: 2,
+        }}
+      />
+      {/* {selected && (
         <EdgeLabelRenderer>
           <div
             style={{
@@ -53,7 +55,7 @@ export default function CustomEdge({
             </div>
           </div>
         </EdgeLabelRenderer>
-      )}
+      )} */}
     </>
   );
 }
