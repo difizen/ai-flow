@@ -23,6 +23,8 @@ export const StartNode = (props: Props) => {
 
         <VariableForm
           label="输入"
+          showRequired={false}
+          dynamic={false}
           values={config?.outputs || []}
           onChange={(values) => {
             console.log('qianyan', values);

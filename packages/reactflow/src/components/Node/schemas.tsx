@@ -3,11 +3,10 @@ import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
 export const StartNodeDefaultConfig: NodeDataType = {
   id: '1',
   type: NodeTypeEnum.Start,
-  nodeMeta: {
-    title: '开始节点',
-    icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png',
-    description: '开始节点description',
-  },
+  name: '开始节点',
+  icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png',
+  description: '开始节点description',
+
   config: {
     outputs: [
       {
@@ -23,11 +22,11 @@ export const StartNodeDefaultConfig: NodeDataType = {
 export const EndNodeDefaultConfig: NodeDataType = {
   id: '2',
   type: NodeTypeEnum.End,
-  nodeMeta: {
-    title: '结束节点',
-    icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-End.png',
-    description: '结束节点description',
-  },
+
+  name: '结束节点',
+  icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-End.png',
+  description: '结束节点description',
+
   config: {
     params: [
       {
@@ -36,7 +35,7 @@ export const EndNodeDefaultConfig: NodeDataType = {
           type: 'string',
           // options: ['useAnswerContent', 'returnVariables'],
           value: {
-            type: 'literal',
+            type: 'value',
             content: 'useAnswerContent',
           },
         },
@@ -47,7 +46,7 @@ export const EndNodeDefaultConfig: NodeDataType = {
           type: 'boolean',
 
           value: {
-            type: 'literal',
+            type: 'value',
             content: true,
           },
         },
@@ -70,11 +69,10 @@ export const EndNodeDefaultConfig: NodeDataType = {
 export const LLMNodeDefaultConfig: NodeDataType = {
   id: '3',
   type: NodeTypeEnum.LLM,
-  nodeMeta: {
-    title: '大模型节点',
-    icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-LLM.png',
-    description: '大模型节点description',
-  },
+
+  name: '大模型节点',
+  icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-LLM.png',
+  description: '大模型节点description',
   config: {
     params: [
       {
@@ -82,7 +80,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'string',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '豆包·Function call模型',
           },
         },
@@ -92,7 +90,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'integer',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '1706077826',
           },
         },
@@ -102,7 +100,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'string',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '',
           },
         },
@@ -112,7 +110,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'float',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '1',
           },
         },
@@ -122,7 +120,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'string',
           value: {
-            type: 'literal',
+            type: 'value',
             content: 'balance',
           },
         },
@@ -132,7 +130,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'float',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '0.7',
           },
         },
@@ -142,7 +140,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'integer',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '2',
           },
         },
@@ -152,7 +150,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'integer',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '1024',
           },
         },
@@ -162,7 +160,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'boolean',
           value: {
-            type: 'literal',
+            type: 'value',
             content: false,
           },
         },
@@ -172,7 +170,7 @@ export const LLMNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'string',
           value: {
-            type: 'literal',
+            type: 'value',
             content: '',
           },
         },
@@ -190,11 +188,11 @@ export const LLMNodeDefaultConfig: NodeDataType = {
 export const KnowledgeNodeDefaultConfig: NodeDataType = {
   id: '4',
   type: NodeTypeEnum.Knowledge,
-  nodeMeta: {
-    title: '知识库节点',
-    icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Knowledge.png',
-    description: '知识库节点description',
-  },
+
+  name: '知识库节点',
+  icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Knowledge.png',
+  description: '知识库节点description',
+
   config: {
     params: [
       {
@@ -205,7 +203,7 @@ export const KnowledgeNodeDefaultConfig: NodeDataType = {
             type: 'string',
           },
           value: {
-            type: 'literal',
+            type: 'value',
             content: [],
           },
         },
@@ -215,7 +213,7 @@ export const KnowledgeNodeDefaultConfig: NodeDataType = {
         input: {
           type: 'integer',
           value: {
-            type: 'literal',
+            type: 'value',
           },
         },
       },

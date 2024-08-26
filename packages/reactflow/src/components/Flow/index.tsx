@@ -1,6 +1,4 @@
-import { StartNode } from '@/components/Node/StartNode';
-
-import { NodeType, NodeTypeEnum } from '@/interfaces/flow';
+import { NodeType } from '@/interfaces/flow';
 
 import { useFlowStore } from '@/stores/useFlowStore';
 import { useShortcutsStore } from '@/stores/useShortcutsStore';
@@ -17,9 +15,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import CustomEdge from '../CustomEdge';
 import { FlowController } from '../FlowController';
-import { EndNode } from '../Node/EndNode';
-import { KnowledgeNode } from '../Node/KnowledgeNode';
-import { LLMNode } from '../Node/LLMNode';
 import {
   handleCopy,
   handleCut,
@@ -30,13 +25,6 @@ import {
   handleUndo,
 } from './keys';
 
-const nodeTypes = {
-  [NodeTypeEnum.Start]: StartNode,
-  [NodeTypeEnum.End]: EndNode,
-  [NodeTypeEnum.LLM]: LLMNode,
-  [NodeTypeEnum.Knowledge]: KnowledgeNode,
-};
-
 const edgeTypes = {
   custom: CustomEdge,
 };
@@ -44,10 +32,11 @@ const edgeTypes = {
 interface FlowProps {
   miniMap?: boolean;
   classNames?: string;
+  nodeTypes: any;
 }
 
 function Flow(props: FlowProps) {
-  const { miniMap = true, classNames } = props;
+  const { miniMap = true, classNames, nodeTypes } = props;
   const position = useRef({ x: 0, y: 0 });
   const [lastSelection, setLastSelection] =
     useState<OnSelectionChangeParams | null>(null);
@@ -95,104 +84,6 @@ function Flow(props: FlowProps) {
   useHotkeys('delete', (e) =>
     handleDelete(e, lastSelection, deleteNode, deleteEdge, takeSnapshot),
   );
-
-  // useEffect(() => {
-  //   const nodes: NodeType[] = [
-  //     {
-  //       id: 'node-1',
-  //       type: 'start',
-  //       data: {
-  //         id: 'node-1',
-  //         nodeType: NodeTypeEnum.LLM,
-  //         nodeMeta: {
-  //           title: '开始',
-  //           icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png',
-  //           description: '工作流的起始节点，用于设定启动工作流需要的信息',
-  //         },
-  //         config: {
-  //           outputs: [
-  //             {
-  //               type: 'string',
-  //               name: 'BOT_USER_INPUT',
-  //               required: false,
-  //               description: '用户本轮对话输入内容',
-  //             },
-  //           ],
-  //         },
-  //       },
-  //       position: { x: 250, y: 50 },
-  //     },
-  //     {
-  //       id: 'node-2',
-  //       type: 'end',
-  //       data: {
-  //         id: 'node-2',
-  //         nodeType: NodeTypeEnum.LLM,
-  //         nodeMeta: {
-  //           title: '结束',
-  //           icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-End.png',
-  //           description: '工作流的最终节点，用于返回工作流运行后的结果信息',
-  //         },
-  //         config: {
-  //           params: [
-  //             {
-  //               name: 'terminatePlan',
-  //               input: {
-  //                 type: 'string',
-  //                 value: {
-  //                   type: 'literal',
-  //                   content: 'terminate',
-  //                 },
-  //               },
-  //             },
-  //             {
-  //               name: 'streamingOutput',
-  //               input: {
-  //                 type: 'boolean',
-  //                 value: {
-  //                   type: 'literal',
-  //                   content: true,
-  //                 },
-  //               },
-  //             },
-  //             {
-  //               name: 'content',
-  //               input: {
-  //                 type: 'string',
-  //                 value: {
-  //                   type: 'literal',
-  //                   content: '{{response_for_model}}',
-  //                 },
-  //               },
-  //             },
-  //           ],
-  //           inputs: [
-  //             {
-  //               name: 'response_for_model',
-  //               input: {
-  //                 type: 'string',
-  //                 value: {
-  //                   type: 'ref',
-  //                 },
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //       position: { x: 1450, y: 100 },
-  //     },
-
-  //   ];
-  //   setNodes(nodes);
-  //   setEdges([
-  //     {
-  //       id: 'xy-edge__node-2-node-1',
-  //       source: 'node-2',
-  //       target: 'node-1',
-  //       type: 'custom',
-  //     },
-  //   ]);
-  // }, []);
 
   useEffect(() => {
     reactFlowInstance?.fitView();
@@ -261,7 +152,7 @@ function Flow(props: FlowProps) {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnectMod}
-        nodeTypes={nodeTypes as any}
+        nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         disableKeyboardA11y={true}
         onDrop={onDrop}

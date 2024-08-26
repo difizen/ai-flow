@@ -1,15 +1,25 @@
 import { ReactFlowJsonObject, XYPosition } from '@xyflow/react';
 
 export enum NodeTypeEnum {
-  'LLM' = 'llm',
-  'Knowledge' = 'knowledge',
-  'Plugin' = 'plugin',
   'Start' = 'start',
   'End' = 'end',
-  'Code' = 'code',
+  'LLM' = 'llm',
+  'Knowledge' = 'knowledge',
+  'Agent' = 'agent',
+
+  // 'Plugin' = 'plugin',
+  'Tool' = 'tool',
+  'IfElse' = 'ifelse',
 }
+
+export enum IfElseNodeCompareType {
+  Equal = 'equal',
+  NotEqual = 'notequal',
+  Blank = 'blank',
+}
+
 export interface LiteralValueType {
-  type: 'literal';
+  type: 'value';
   content?: string | number | boolean | string[] | number[] | boolean[];
 }
 
@@ -44,19 +54,21 @@ export interface NodeDataConfigType {
 }
 
 export interface NodeDataMetaType {
-  title: string;
+  name: string;
   icon?: string;
   description?: string;
 }
 
 export interface NodeDataType {
-  id: string;
+  id: string | number;
   type: NodeTypeEnum;
   runResult?: {
     status: string;
     result?: any;
   };
-  nodeMeta: NodeDataMetaType;
+  name: string;
+  icon?: string;
+  description?: string;
   config?: NodeDataConfigType;
 }
 

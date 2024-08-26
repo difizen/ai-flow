@@ -12,10 +12,18 @@ export interface VariableFormProps {
   label: string;
   values: BasicSchema[];
   onChange: (values: BasicSchema[]) => void;
+  dynamic?: boolean;
+  showRequired?: boolean;
 }
 
 export const VariableForm = (props: VariableFormProps) => {
-  const { label, values, onChange } = props;
+  const {
+    label,
+    values,
+    onChange,
+    dynamic = true,
+    showRequired = true,
+  } = props;
   const onFinish = (values: any) => {
     console.log('Received values of form:', values);
   };
@@ -60,8 +68,10 @@ export const VariableForm = (props: VariableFormProps) => {
                       <Space style={{ display: 'flex' }} align="baseline">
                         <Form.Item className="w-[240px]">变量名</Form.Item>
                         <Form.Item className="w-[200px]">变量类型</Form.Item>
-                        <Form.Item className="w-[240px]">变量描述</Form.Item>
-                        <Form.Item className="w-[60px]">是否必要</Form.Item>
+                        {/* <Form.Item className="w-[240px]">变量描述</Form.Item> */}
+                        {showRequired && (
+                          <Form.Item className="w-[60px]">是否必要</Form.Item>
+                        )}
                       </Space>
                     </>
                   )}
@@ -92,7 +102,6 @@ export const VariableForm = (props: VariableFormProps) => {
                           className="w-[200px]"
                         >
                           <SelectInNode
-                            selectorId="variable-form"
                             options={[
                               { label: 'String', value: 'String' },
                               { label: 'Integer', value: 'Integer' },
@@ -104,36 +113,42 @@ export const VariableForm = (props: VariableFormProps) => {
                             placeholder=""
                           />
                         </Form.Item>
-                        <Form.Item
+                        {/* <Form.Item
                           {...restField}
                           name={[name, 'description']}
                           className="w-[240px]"
                         >
                           <Input placeholder="变量的用途" />
-                        </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'required']}
-                          className="w-[60px]"
-                        >
-                          <Checkbox />
-                        </Form.Item>
-                        <MinusCircleOutlined
-                          className="cursor-pointer"
-                          onClick={() => remove(name)}
-                        />
+                        </Form.Item> */}
+                        {showRequired && (
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'required']}
+                            className="w-[60px]"
+                          >
+                            <Checkbox />
+                          </Form.Item>
+                        )}
+                        {dynamic && (
+                          <MinusCircleOutlined
+                            className="cursor-pointer"
+                            onClick={() => remove(name)}
+                          />
+                        )}
                       </Space>
                     ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        添加变量
-                      </Button>
-                    </Form.Item>
+                    {dynamic && (
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          添加变量
+                        </Button>
+                      </Form.Item>
+                    )}
                   </>
                 )}
               </Form.List>
@@ -141,6 +156,6 @@ export const VariableForm = (props: VariableFormProps) => {
           ),
         },
       ]}
-    ></Collapse>
+    />
   );
 };

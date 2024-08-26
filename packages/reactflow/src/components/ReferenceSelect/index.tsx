@@ -1,23 +1,22 @@
-import { Input, Space } from 'antd';
+import { Input } from 'antd';
 import React from 'react';
 import { CascaderInNode } from '../AIBasic/CascaderInNode';
 import { SelectInNode } from '../AIBasic/SelectInNode';
 
 export const ReferenceSelect = (props: {
   value?: {
-    type: 'ref' | 'literal';
-    value?: string;
+    type: 'ref' | 'value';
+    content?: string;
   };
-  onChange?: (value: { type: 'ref' | 'literal'; value?: string }) => void;
-  refOptions: { label: string; value: string }[];
+  onChange?: (value: { type: 'ref' | 'value'; content?: string }) => void;
+  refOptions: { label: string; content: string }[];
 }) => {
   const { value, onChange, refOptions } = props;
   console.log('🚀 ~ value:', value);
 
   return (
-    <Space wrap>
+    <div className="flex gap-2">
       <SelectInNode
-        selectorId="ref-select"
         defaultValue={value?.type || 'ref'}
         style={{ width: 120 }}
         onChange={(val) =>
@@ -27,26 +26,32 @@ export const ReferenceSelect = (props: {
         }
         options={[
           { label: 'ref', value: 'ref' },
-          { label: 'literal', value: 'literal' },
+          { label: 'value', value: 'value' },
         ]}
       />
 
       {value?.type !== 'ref' ? (
-        <Input />
+        <Input
+          onChange={(e) =>
+            onChange?.({
+              type: value.type,
+              content: e.target.value,
+            })
+          }
+        />
       ) : (
         <CascaderInNode
-          selectorId="ref-cascader"
           style={{ width: 120 }}
-          value={value?.value || []}
+          value={value?.content || []}
           onChange={(val) =>
             onChange?.({
               type: value.type,
-              value: val,
+              content: val,
             })
           }
           options={refOptions}
         />
       )}
-    </Space>
+    </div>
   );
 };
