@@ -1,6 +1,6 @@
 import { CollapseWrapper } from '@/components/AIBasic/CollapseWrapper';
 import { OutputString } from '@/components/AIBasic/OutputVariableTree/OutputString';
-import { RefrenceForm } from '@/components/ReferenceForm';
+import { ReferenceForm } from '@/components/ReferenceForm';
 import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
 import React from 'react';
 import { NodeWrapper } from '../NodeWrapper';
@@ -19,7 +19,7 @@ export const KnowledgeNode = (props: Props) => {
   return (
     <NodeWrapper nodeProps={props}>
       <div>
-        <RefrenceForm
+        <ReferenceForm
           label="输入变量"
           nodes={[
             {
@@ -47,7 +47,7 @@ export const KnowledgeNode = (props: Props) => {
           ]}
           values={[{ name: 'query', type: 'ref' }]}
           onChange={(values) => {
-            console.log('RefrenceForm', values);
+            console.log('ReferenceForm', values);
           }}
         />
         <CollapseWrapper

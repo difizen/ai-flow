@@ -1,6 +1,6 @@
 import { CollapseWrapper } from '@/components/AIBasic/CollapseWrapper';
 import { OutputString } from '@/components/AIBasic/OutputVariableTree/OutputString';
-import { RefrenceForm } from '@/components/ReferenceForm';
+import { ReferenceForm } from '@/components/ReferenceForm';
 import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
 import React from 'react';
 import { NodeWrapper } from '../NodeWrapper';
@@ -19,7 +19,7 @@ export const AgentNode = (props: Props) => {
   return (
     <NodeWrapper nodeProps={props}>
       <div>
-        <RefrenceForm
+        <ReferenceForm
           label="输入变量"
           nodes={[
             {
@@ -45,9 +45,11 @@ export const AgentNode = (props: Props) => {
               position: { x: 250, y: 50 },
             },
           ]}
-          values={[{ name: 'input', type: 'ref' }]}
+          values={[
+            { name: 'input', type: 'string', value: { type: 'reference' } },
+          ]}
           onChange={(values) => {
-            console.log('RefrenceForm', values);
+            console.log('ReferenceForm', values);
           }}
         />
 

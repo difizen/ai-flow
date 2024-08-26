@@ -13,7 +13,7 @@ export interface RefrenceFormProps {
   dynamic?: boolean;
 }
 
-export const RefrenceForm = (props: RefrenceFormProps) => {
+export const ReferenceForm = (props: RefrenceFormProps) => {
   const { label, values, onChange, nodes, dynamic = false } = props;
 
   const [form] = Form.useForm();
@@ -77,7 +77,7 @@ export const RefrenceForm = (props: RefrenceFormProps) => {
                       className="w-[240px]"
                       rules={[{ required: true, message: '变量名不可为空' }]}
                     >
-                      <Input placeholder="变量名" />
+                      <Input placeholder="变量名" disabled={!dynamic} />
                     </Form.Item>
                     <Form.Item
                       {...restField}

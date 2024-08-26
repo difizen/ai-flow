@@ -16,12 +16,17 @@ export const NodeWrapper = (props: {
   children: React.ReactElement;
   leftHandler?: boolean;
   rightHandler?: boolean;
+  rightHandlerConfig?: {
+    id: string;
+    style: Record<string, any>;
+  }[];
 }) => {
   const {
     nodeProps,
     children,
     leftHandler = true,
     rightHandler = true,
+    rightHandlerConfig,
   } = props;
   const { name, description, icon } = nodeProps.data;
   console.log('🚀 ~ nodeProps.selected:', nodeProps.selected);
@@ -53,17 +58,34 @@ export const NodeWrapper = (props: {
           )}
         />
       )}
-      {rightHandler && (
-        <Handle
-          type="target"
-          position={Position.Right}
-          style={{ borderColor: 'rgb(59 130 246)' }}
-          className={classNames(
-            '-mr-0.5 ',
-            'w-3 h-3 rounded-full border-2 bg-white',
-          )}
-        />
-      )}
+      {rightHandler &&
+        (rightHandlerConfig ? (
+          <>
+            {rightHandlerConfig.map((item) => (
+              <Handle
+                key={item.id}
+                id={item.id}
+                type="target"
+                position={Position.Right}
+                style={{ borderColor: 'rgb(59 130 246)', ...item.style }}
+                className={classNames(
+                  '-mr-0.5 ',
+                  'w-3 h-3 rounded-full border-2 bg-white',
+                )}
+              />
+            ))}
+          </>
+        ) : (
+          <Handle
+            type="target"
+            position={Position.Right}
+            style={{ borderColor: 'rgb(59 130 246)' }}
+            className={classNames(
+              '-mr-0.5 ',
+              'w-3 h-3 rounded-full border-2 bg-white',
+            )}
+          />
+        ))}
 
       <div className="h-full w-full text-gray-400 pb-1">
         <div className="w-full px-5 pb-2 text-sm">{description}</div>
