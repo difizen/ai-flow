@@ -13,8 +13,6 @@ type Props = {
 
 export const StartNode = (props: Props) => {
   const { data } = props;
-  console.log('🚀 ~ StartNode ~ data:', data);
-  const { config } = data;
 
   return (
     <NodeWrapper nodeProps={props} leftHandler={false}>
@@ -25,7 +23,7 @@ export const StartNode = (props: Props) => {
           label="输入"
           showRequired={false}
           dynamic={false}
-          values={config?.outputs || []}
+          values={data.config?.outputs || []}
           onChange={(values) => {
             console.log('qianyan', values);
           }}

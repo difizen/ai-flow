@@ -1,7 +1,11 @@
 import { CollapseWrapper } from '@/components/AIBasic/CollapseWrapper';
-import { OutputString } from '@/components/AIBasic/OutputVariableTree/OutputString';
+import { OutputVariable } from '@/components/AIBasic/OutputVariableTree/OutputVariable';
 import { ReferenceForm } from '@/components/ReferenceForm';
-import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
+import { NodeDataType } from '@/interfaces/flow';
+import { useFlowStore } from '@/stores/useFlowStore';
+import { useKnowledgeStore } from '@/stores/useKnowledgeStore';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Modal } from 'antd';
 import React from 'react';
 import { NodeWrapper } from '../NodeWrapper';
 
@@ -13,52 +17,66 @@ type Props = {
 };
 
 export const KnowledgeNode = (props: Props) => {
-  // const { data } = props;
+  const { data } = props;
   // const { config } = data;
+  const { findUpstreamNodes } = useFlowStore();
+
+  const { knowledges } = useKnowledgeStore();
+  const upstreamNode = findUpstreamNodes(data.id.toString());
 
   return (
     <NodeWrapper nodeProps={props}>
       <div>
         <ReferenceForm
           label="输入变量"
-          nodes={[
-            {
-              id: 'node-1',
-              type: 'start',
-              data: {
-                id: 'node-1',
-                type: NodeTypeEnum.LLM,
-                name: '开始',
-                icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png',
-                description: '工作流的起始节点，用于设定启动工作流需要的信息',
-                config: {
-                  outputs: [
-                    {
-                      type: 'string',
-                      name: 'BOT_USER_INPUT',
-                      required: false,
-                      description: '用户本轮对话输入内容',
-                    },
-                  ],
-                },
-              },
-              position: { x: 250, y: 50 },
-            },
-          ]}
-          values={[{ name: 'query', type: 'ref' }]}
+          nodes={[...(upstreamNode as any)]}
+          values={[...(data.config?.inputs?.input_param || [])]}
           onChange={(values) => {
             console.log('ReferenceForm', values);
           }}
         />
         <CollapseWrapper
           className="mt-3"
-          label={'知识库配置'}
+          label={
+            <div className="flex items-center">
+              <div>知识库配置</div>
+              <Button
+                size="small"
+                type="link"
+                icon={<PlusOutlined />}
+                className="ml-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  Modal.confirm({
+                    title: '导入知识库',
+                    icon: null,
+                    content: <></>,
+                    onOk: () => {
+                      console.log('knowledges', knowledges);
+                    },
+                  });
+                }}
+              >
+                导入
+              </Button>
+            </div>
+          }
           content={<>List</>}
         />
         <CollapseWrapper
           className="mt-3"
           label={'Output'}
-          content={<OutputString />}
+          content={
+            <>
+              {(data.config?.outputs || []).map((output) => (
+                <OutputVariable
+                  key={output.name!}
+                  name={output.name!}
+                  type={output.type}
+                />
+              ))}
+            </>
+          }
         />
       </div>
     </NodeWrapper>

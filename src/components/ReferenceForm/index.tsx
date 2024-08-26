@@ -1,4 +1,4 @@
-import { InputSchema, NodeType } from '@/interfaces/flow';
+import { BasicSchema, NodeType } from '@/interfaces/flow';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space } from 'antd';
 import React, { useEffect } from 'react';
@@ -7,7 +7,7 @@ import { ReferenceSelect } from '../ReferenceSelect';
 
 export interface RefrenceFormProps {
   label: string;
-  values: InputSchema[];
+  values: BasicSchema[];
   onChange: (values: []) => void;
   nodes: NodeType[];
   dynamic?: boolean;
@@ -21,18 +21,18 @@ export const ReferenceForm = (props: RefrenceFormProps) => {
   useEffect(() => {
     form.setFieldValue('variables', values);
   }, []);
+  console.log('🚀 ~ useEffect ~ values:', values);
 
   const options = nodes.map((node) => {
     return {
       label: node.data.name,
       value: node.data.id,
-      children:
-        node.data?.config?.outputs?.map((output) => {
-          return {
-            label: output.name,
-            value: output.name,
-          };
-        }) || [],
+      children: node.data?.config?.outputs?.map((output) => {
+        return {
+          label: output.name,
+          value: output.name,
+        };
+      }),
     };
   });
 
@@ -42,7 +42,6 @@ export const ReferenceForm = (props: RefrenceFormProps) => {
       content={
         <Form
           form={form}
-          name="dynamic_form_nest_item"
           autoComplete="off"
           onValuesChange={(_, allFields) => {
             console.log('🚀 ~ form.validateFields ~ allFields:', allFields);

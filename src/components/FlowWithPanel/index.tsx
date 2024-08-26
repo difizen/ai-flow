@@ -1,8 +1,7 @@
 import { EventEmitterContextProvider } from '@/context/event-emitter';
 import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
-import { useFlowStore } from '@/stores/useFlowStore';
 import yaml from 'js-yaml';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Flow from '../Flow';
 import { AgentNode } from '../Node/AgentNode';
 import { EndNode } from '../Node/EndNode';
@@ -34,7 +33,7 @@ const yamlContent = `
   type: end
   data:
     inputs:
-      inputParam:
+      input_param:
         - name: response
           type: string
           value:
@@ -54,20 +53,18 @@ const yamlContent = `
     y: 100
   data:
     inputs:
-      inputParam:
+      input_param:
         - name: input
           description:
           type: string
           value:
             type: reference
-            content: ['start', 'BOT_USER_INPUT']
         - name: background
           description:
           type: string
           value:
             type: reference
-            content: ['someNode', 'variable2']
-      llmParam:
+      llm_param:
         - type: string
           name: id
           value: qwen_llm
@@ -97,7 +94,7 @@ const yamlContent = `
             需要回答的问题是: {input}
     outputs:
       - type: string
-      - name: output
+        name: output
 - id: 4
   name: 知识库示例
   description:
@@ -113,13 +110,14 @@ const yamlContent = `
           value: demo_knowledge
         - type: string
           name: top_k
-          value: '2'
+          value:
+            type: value
+            content: '2'
       input_param:
         - type: string
           name: query # 自然语言的知识库query
           value:
             type: reference
-            content: ['1', 'output'] # 通过nodeId + paramKey 定位引用变量
     outputs:
       - name: output
         type: string
@@ -163,7 +161,7 @@ const yamlContent = `
           name: input
           value:
             type: reference
-            content: ['1', 'output'] # 通过nodeId + paramKey 定位引用变量
+
     outputs:
       - name: output
         type: string
@@ -179,24 +177,24 @@ const yamlContent = `
       branches: # 这一期这做一层，不包括 and or 还有我理解默认逻辑不展示在这块对吧，只在edge体现
         - name: branch-1
           conditions:
-            - compare: equal/not-equal/blank
+            - compare: equal
               left:
                 type: string
                 value:
                   type: reference
-                  content: ['1', 'output']
               right: # blank 没有right
                 type: string # 只有 if 和 else，branch-1和branch-default
                 value:
                   type: reference
-                  content: ['2', 'output']
+
 
 `;
 
 export const NodeSchemaParser = (obj: Record<string, any>) => {
   obj.config = obj.data;
   obj.icon =
-    'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png';
+    'https://mdn.alipayobjects.com/huamei_xbkogb/afts/img/A*PzmdRpvZz58AAAAAAAAAAAAADqarAQ/original';
+
   delete obj.data;
 };
 
@@ -217,21 +215,21 @@ export const FlowWithPanel = () => {
   });
   console.log('🚀 ~ yaml_data:', yaml_data);
 
-  const setNodes = useFlowStore((state) => state.setNodes);
-  const reactFlowInstance = useFlowStore((state) => state.reactFlowInstance);
+  // const setNodes = useFlowStore((state) => state.setNodes);
+  // const reactFlowInstance = useFlowStore((state) => state.reactFlowInstance);
 
-  useEffect(() => {
-    const add = (yaml_data as any).map((node: any) => {
-      return {
-        id: node.id,
-        type: node.type,
-        position: node.position,
-        data: node,
-      };
-    });
+  // useEffect(() => {
+  //   const add = (yaml_data as any).map((node: any) => {
+  //     return {
+  //       id: node.id,
+  //       type: node.type,
+  //       position: node.position,
+  //       data: node,
+  //     };
+  //   });
 
-    setNodes(add);
-  }, [reactFlowInstance]);
+  //   setNodes(add);
+  // }, [reactFlowInstance]);
 
   return (
     <EventEmitterContextProvider>

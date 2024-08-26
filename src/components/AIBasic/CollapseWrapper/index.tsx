@@ -8,7 +8,7 @@ export const CollapseWrapper = ({
   content,
 }: {
   className?: string;
-  label?: string;
+  label?: string | React.ReactNode;
   content: ReactNode;
 }) => {
   return (

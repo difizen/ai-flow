@@ -13,7 +13,7 @@
   type: end
   data:
     inputs:
-      inputParam:
+      input_param:
         - name: response
           type: string
           value:
@@ -33,7 +33,7 @@
     y: 2
   data:
     inputs:
-      inputParam:
+      input_param:
         - name: input
           description:
           type: string
@@ -46,7 +46,7 @@
           value:
             type: reference
             content: ['someNode', 'variable2']
-      llmParam:
+      llm_param:
         - type: string
           name: id
           value: qwen_llm

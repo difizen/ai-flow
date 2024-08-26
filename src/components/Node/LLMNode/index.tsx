@@ -1,9 +1,13 @@
 import { CollapseWrapper } from '@/components/AIBasic/CollapseWrapper';
-import { OutputString } from '@/components/AIBasic/OutputVariableTree/OutputString';
+import { OutputVariable } from '@/components/AIBasic/OutputVariableTree/OutputVariable';
 import PromptEditor from '@/components/AIBasic/PromptEditor';
 import { SelectInNode } from '@/components/AIBasic/SelectInNode';
 import { ReferenceForm } from '@/components/ReferenceForm';
-import { NodeDataType, NodeTypeEnum } from '@/interfaces/flow';
+import { NodeDataType } from '@/interfaces/flow';
+import { useFlowStore } from '@/stores/useFlowStore';
+import { useModelStore } from '@/stores/useModelStore';
+import { BarsOutlined } from '@ant-design/icons';
+import { Button, InputNumber, Popover } from 'antd';
 import React, { useState } from 'react';
 import { NodeWrapper } from '../NodeWrapper';
 
@@ -15,9 +19,14 @@ type Props = {
 };
 
 export const LLMNode = (props: Props) => {
-  // const { data } = props;
+  const { data } = props;
   // console.log('🚀 ~ LLMNode ~ data:', data);
   // const { config } = data;
+
+  const { findUpstreamNodes } = useFlowStore();
+  const upstreamNode = findUpstreamNodes(data.id.toString());
+
+  const { models, modelConfig } = useModelStore();
 
   const [value, setValue] = useState<string>('hello');
   return (
@@ -28,10 +37,31 @@ export const LLMNode = (props: Props) => {
           className="mb-3"
           label={'模型配置'}
           content={
-            <SelectInNode
-              options={[{ label: 'model-config', value: 'model-config' }]}
-              className="w-full"
-            />
+            <div className="flex">
+              <SelectInNode
+                options={models.map((model) => ({
+                  label: model.name,
+                  value: model.id,
+                }))}
+                className="w-full mr-2"
+              />
+              <Popover
+                title="模型配置"
+                content={
+                  <div>
+                    {Object.entries(modelConfig).map(([key, value]) => (
+                      <>
+                        {key} <InputNumber key={value} />
+                      </>
+                    ))}
+                  </div>
+                }
+              >
+                {Object.entries(modelConfig).length > 0 && (
+                  <Button type="text" icon={<BarsOutlined />}></Button>
+                )}
+              </Popover>
+            </div>
           }
         />
         {/* Part2 Ref Form */}
@@ -39,39 +69,8 @@ export const LLMNode = (props: Props) => {
         <ReferenceForm
           label="输入变量"
           dynamic
-          nodes={[
-            {
-              id: 'node-1',
-              type: 'start',
-              data: {
-                id: 'node-1',
-                type: NodeTypeEnum.LLM,
-                name: '开始',
-                icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/dvsmryvd_avi_dvsm/ljhwZthlaukjlkulzlp/icon/icon-Start.png',
-                description: '工作流的起始节点，用于设定启动工作流需要的信息',
-                config: {
-                  outputs: [
-                    {
-                      type: 'string',
-                      name: 'BOT_USER_INPUT',
-                      required: false,
-                      description: '用户本轮对话输入内容',
-                    },
-                  ],
-                },
-              },
-              position: { x: 250, y: 50 },
-            },
-          ]}
-          values={[
-            {
-              name: 'output',
-              type: 'string',
-              value: {
-                type: 'reference',
-              },
-            },
-          ]}
+          nodes={[...(upstreamNode as any)]}
+          values={[...(data.config?.inputs?.input_param || [])]}
           onChange={(values) => {
             console.log('ReferenceForm', values);
           }}
@@ -84,8 +83,17 @@ export const LLMNode = (props: Props) => {
             <div className="h-[200px] bg-white rounded-md cursor-pointer">
               <PromptEditor
                 value={value}
+                placeholder="请输入 Prompt"
                 onChange={(val) => setValue(val)}
-                variableBlock={{ show: true }}
+                variableBlock={{
+                  show: true,
+                  variables: data.config?.inputs?.input_param.map((input) => {
+                    return {
+                      name: input.name!,
+                      value: input.name!,
+                    };
+                  }),
+                }}
               />
             </div>
           }
@@ -93,8 +101,18 @@ export const LLMNode = (props: Props) => {
         {/* Part4 Outputer */}
         <CollapseWrapper
           className="mt-3"
-          label={'Output'}
-          content={<OutputString />}
+          label={'Prompt'}
+          content={
+            <>
+              {(data.config?.outputs || []).map((output) => (
+                <OutputVariable
+                  key={output.name!}
+                  name={output.name!}
+                  type={output.type}
+                />
+              ))}
+            </>
+          }
         />
       </div>
     </NodeWrapper>
