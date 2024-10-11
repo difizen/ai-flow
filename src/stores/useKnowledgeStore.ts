@@ -1,3 +1,4 @@
+import type { BasicSchema } from '@/interfaces/flow';
 import { create } from 'zustand';
 
 export interface Knowledge {
@@ -6,14 +7,18 @@ export interface Knowledge {
   description?: string;
 }
 
+export type KnowledgeSelectorNode =
+  | ((props: { nodeId: string; knowledgeParam: BasicSchema[] }) => JSX.Element)
+  | null;
+
 export interface KnowledgeStoreType {
-  knowledges: Knowledge[];
-  setKnowledges: (knowledges: Knowledge[]) => void;
+  KnowledgeSelector: KnowledgeSelectorNode | null;
+  setKnowledgeSelector: (KnowledgeSelector: KnowledgeSelectorNode) => void;
 }
 
 export const useKnowledgeStore = create<KnowledgeStoreType>((set) => ({
-  knowledges: [],
-  setKnowledges: (knowledges: Knowledge[]) => {
-    set({ knowledges });
+  KnowledgeSelector: null,
+  setKnowledgeSelector: (KnowledgeSelector) => {
+    set({ KnowledgeSelector });
   },
 }));

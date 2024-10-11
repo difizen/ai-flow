@@ -3,6 +3,7 @@ import type { EntityMatch } from '@lexical/text';
 import { mergeRegister } from '@lexical/utils';
 import type { Klass, LexicalEditor, TextNode } from 'lexical';
 import { useCallback, useEffect } from 'react';
+
 import type { CustomTextNode } from './plugins/custom-text/node';
 import { registerLexicalTextEntity } from './utils';
 

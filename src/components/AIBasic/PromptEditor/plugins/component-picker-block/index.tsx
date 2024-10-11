@@ -4,12 +4,14 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import type { MenuRenderFn } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import { LexicalTypeaheadMenuPlugin } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import type { TextNode } from 'lexical';
-import React, { Fragment, memo, useCallback, useState } from 'react';
+import { Fragment, memo, useCallback, useState } from 'react';
 import ReactDOM from 'react-dom';
+
 import { useBasicTypeaheadTriggerMatch } from '../../hooks';
 import type { ExternalToolBlockType, VariableBlockType } from '../../types';
-import { $splitNodeContainingQuery } from '../../utils';
-import { INSERT_VARIABLE_VALUE_BLOCK_COMMAND } from '../variable-block';
+// import { $splitNodeContainingQuery } from '../../utils';
+import { INSERT_VARIABLE_VALUE_BLOCK_COMMAND } from '../variable-block/index';
+
 import { useOptions } from './hooks';
 import type { PickerBlockMenuOption } from './menu';
 
@@ -43,11 +45,12 @@ const ComponentPicker = ({
   const [queryString, setQueryString] = useState<string | null>(null);
 
   eventEmitter?.useSubscription((v: any) => {
-    if (v.type === INSERT_VARIABLE_VALUE_BLOCK_COMMAND)
+    if (v.type === INSERT_VARIABLE_VALUE_BLOCK_COMMAND) {
       editor.dispatchCommand(
         INSERT_VARIABLE_VALUE_BLOCK_COMMAND,
         `{{${v.payload}}}`,
       );
+    }
   });
 
   const { allFlattenOptions } = useOptions(variableBlock, externalToolBlock);
@@ -59,7 +62,9 @@ const ComponentPicker = ({
       closeMenu: () => void,
     ) => {
       editor.update(() => {
-        if (nodeToRemove && selectedOption?.key) nodeToRemove.remove();
+        if (nodeToRemove && selectedOption?.key) {
+          nodeToRemove.remove();
+        }
 
         selectedOption.onSelectMenuOption();
         closeMenu();
@@ -68,21 +73,28 @@ const ComponentPicker = ({
     [editor],
   );
 
-  const handleSelectWorkflowVariable = useCallback(() => {
-    editor.update(() => {
-      const needRemove = $splitNodeContainingQuery(
-        checkForTriggerMatch(triggerString, editor)!,
-      );
-      if (needRemove) needRemove.remove();
-    });
-  }, [editor, checkForTriggerMatch, triggerString]);
+  // const handleSelectWorkflowVariable = useCallback(
+  //   (variables: string[]) => {
+  //     editor.update(() => {
+  //       const needRemove = $splitNodeContainingQuery(
+  //         checkForTriggerMatch(triggerString, editor)!,
+  //       );
+  //       if (needRemove) {
+  //         needRemove.remove();
+  //       }
+  //     });
+  //   },
+  //   [editor, checkForTriggerMatch, triggerString],
+  // );
 
   const renderMenu = useCallback<MenuRenderFn<PickerBlockMenuOption>>(
     (
       anchorElementRef,
       { options, selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
     ) => {
-      if (!(anchorElementRef.current && allFlattenOptions.length)) return null;
+      if (!(anchorElementRef.current && allFlattenOptions.length)) {
+        return null;
+      }
       refs.setReference(anchorElementRef.current);
 
       return (
@@ -129,14 +141,7 @@ const ComponentPicker = ({
         </>
       );
     },
-    [
-      allFlattenOptions.length,
-      refs,
-      isPositioned,
-      floatingStyles,
-      queryString,
-      handleSelectWorkflowVariable,
-    ],
+    [allFlattenOptions.length, refs, isPositioned, floatingStyles, queryString],
   );
 
   return (

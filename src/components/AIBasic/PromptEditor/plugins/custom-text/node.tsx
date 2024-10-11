@@ -2,26 +2,25 @@ import type { EditorConfig, NodeKey, SerializedTextNode } from 'lexical';
 import { $createTextNode, TextNode } from 'lexical';
 
 export class CustomTextNode extends TextNode {
-  static getType() {
+  static override getType() {
     return 'custom-text';
   }
 
-  static clone(node: CustomTextNode) {
+  static override clone(node: CustomTextNode) {
     return new CustomTextNode(node.__text, node.__key);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(text: string, key?: NodeKey) {
     super(text, key);
   }
 
-  createDOM(config: EditorConfig) {
+  override createDOM(config: EditorConfig) {
     const dom = super.createDOM(config);
     dom.classList.add('align-middle');
     return dom;
   }
 
-  static importJSON(serializedNode: SerializedTextNode): TextNode {
+  static override importJSON(serializedNode: SerializedTextNode): TextNode {
     const node = $createTextNode(serializedNode.text);
     node.setFormat(serializedNode.format);
     node.setDetail(serializedNode.detail);
@@ -30,7 +29,7 @@ export class CustomTextNode extends TextNode {
     return node;
   }
 
-  exportJSON(): SerializedTextNode {
+  override exportJSON(): SerializedTextNode {
     return {
       detail: this.getDetail(),
       format: this.getFormat(),
@@ -42,10 +41,9 @@ export class CustomTextNode extends TextNode {
     };
   }
 
-  isSimpleText() {
+  override isSimpleText() {
     return (
-      (this.__type === 'text' || this.__type === 'custom-text') &&
-      this.__mode === 0
+      (this.__type === 'text' || this.__type === 'custom-text') && this.__mode === 0
     );
   }
 }

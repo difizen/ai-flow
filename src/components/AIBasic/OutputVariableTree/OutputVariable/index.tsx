@@ -1,7 +1,10 @@
 import { capitalizeFirstLetter } from '@/utils/basic';
-import React from 'react';
+import { memo } from 'react';
 
-export const OutputVariable = (props: { name: string; type: string }) => {
+export const OutputVariable = memo(function Variable(props: {
+  name: string;
+  type: string;
+}) {
   const { name, type } = props;
   return (
     <div className="flex">
@@ -11,4 +14,4 @@ export const OutputVariable = (props: { name: string; type: string }) => {
       </div>
     </div>
   );
-};
+});

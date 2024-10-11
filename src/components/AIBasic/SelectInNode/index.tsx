@@ -1,6 +1,6 @@
-import { classNames } from '@/utils';
-import { Select, SelectProps } from 'antd';
-import React from 'react';
+import classNames from '@/utils/classnames';
+import type { SelectProps } from 'antd';
+import { Select } from 'antd';
 
 export const SelectInNode = (props: SelectProps) => {
   return (

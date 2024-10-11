@@ -1,31 +1,25 @@
-import { classNames } from '@/utils/basic';
+import classNames from '@/utils/classnames';
 import { Popover, Tag } from 'antd';
-import React from 'react';
 
-export enum RunStatusEnum {
-  Success = 'success',
-  Processing = 'processing',
-  Warning = 'warning',
-  Error = 'error',
-}
+export type RunStatusTypes = 'success' | 'processing' | 'warning' | 'error';
 
 export const RunStatusMap = {
-  [RunStatusEnum.Success]: {
+  ['success']: {
     Label: '运行成功',
     Color: 'green',
     Cssclsname: 'bg-green-50',
   },
-  [RunStatusEnum.Processing]: {
+  ['processing']: {
     Label: '运行中',
     Color: 'blue',
     Cssclsname: 'bg-blue-50',
   },
-  [RunStatusEnum.Warning]: {
+  ['warning']: {
     Label: '警告',
     Color: 'yellow',
     Cssclsname: 'bg-yellow-50',
   },
-  [RunStatusEnum.Error]: {
+  ['error']: {
     Label: '运行失败',
     Color: 'red',
     Cssclsname: 'bg-red-50',
@@ -33,7 +27,7 @@ export const RunStatusMap = {
 };
 
 export interface RunResStatus {
-  status: RunStatusEnum;
+  status: RunStatusTypes;
   runDuration: number;
   runInput?: Record<string, string>;
   runOutput?: Record<string, string>;

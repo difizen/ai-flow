@@ -1,27 +1,24 @@
+import type { SchemaValueType, ValueType } from '@/interfaces/flow';
 import { Input } from 'antd';
-import React from 'react';
-import { CascaderInNode } from '../AIBasic/CascaderInNode';
-import { SelectInNode } from '../AIBasic/SelectInNode';
+import type { DefaultOptionType } from 'antd/es/cascader';
+import { memo } from 'react';
 
-export const ReferenceSelect = (props: {
-  value?: {
-    type: 'reference' | 'value';
-    content?: string | [string, string];
-  };
-  onChange?: (value: {
-    type: 'reference' | 'value';
-    content?: string | [string, string];
-  }) => void;
-  refOptions: { label: string; content: string }[];
+import { CascaderInNode } from '../AIBasic/CascaderInNode/index';
+import { SelectInNode } from '../AIBasic/SelectInNode/index';
+
+export const ReferenceSelectRaw = (props: {
+  value?: SchemaValueType;
+  onChange?: (value: SchemaValueType) => void;
+  refOptions: DefaultOptionType[];
 }) => {
   const { value, onChange, refOptions } = props;
 
   return (
     <div className="flex gap-2">
       <SelectInNode
-        defaultValue={value?.type || 'reference'}
+        value={value?.type || 'reference'}
         style={{ width: 80 }}
-        onChange={(val) =>
+        onChange={(val: ValueType) =>
           onChange?.({
             type: val,
           })
@@ -35,6 +32,7 @@ export const ReferenceSelect = (props: {
       {value?.type === 'value' ? (
         <Input
           style={{ width: 120 }}
+          value={value?.content}
           onChange={(e) =>
             onChange?.({
               type: value.type,
@@ -46,10 +44,10 @@ export const ReferenceSelect = (props: {
         <CascaderInNode
           style={{ width: 120 }}
           value={value?.content || []}
-          onChange={(val) =>
+          onChange={(val: (string | number | null)[]) =>
             onChange?.({
-              type: value?.type,
-              content: val,
+              type: value?.type || 'reference',
+              content: val as [string, string],
             })
           }
           options={refOptions}
@@ -58,3 +56,5 @@ export const ReferenceSelect = (props: {
     </div>
   );
 };
+
+export const ReferenceSelect = memo(ReferenceSelectRaw);

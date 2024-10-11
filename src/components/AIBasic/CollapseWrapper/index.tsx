@@ -1,29 +1,24 @@
 import { CaretRightOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-export const CollapseWrapper = ({
-  className,
-  label,
-  content,
-}: {
+export const CollapseWrapper = (props: {
+  label: string;
+  children: ReactNode;
   className?: string;
-  label?: string | React.ReactNode;
-  content: ReactNode;
 }) => {
+  const { label, children, className } = props;
   return (
     <Collapse
       className={className}
       bordered={false}
       defaultActiveKey={['1']}
-      expandIcon={({ isActive }) => (
-        <CaretRightOutlined rotate={isActive ? 90 : 0} />
-      )}
+      expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
       items={[
         {
           key: '1',
-          label: label || '',
-          children: content,
+          label: label,
+          children: children,
         },
       ]}
     />

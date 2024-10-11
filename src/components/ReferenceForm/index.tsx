@@ -1,114 +1,123 @@
-import { BasicSchema, NodeType } from '@/interfaces/flow';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import type { BasicSchema, NodeType } from '@/interfaces/flow';
+import { RiAddLine, RiDeleteBin7Line } from '@remixicon/react';
 import { Button, Form, Input, Space } from 'antd';
-import React, { useEffect } from 'react';
-import { CollapseWrapper } from '../AIBasic/CollapseWrapper';
-import { ReferenceSelect } from '../ReferenceSelect';
+import { memo, useEffect } from 'react';
+
+import { CollapseWrapper } from '../AIBasic/index';
+import { HoverBlock } from '../FlowController/operator';
+import { ReferenceSelect } from '../ReferenceSelect/index';
 
 export interface RefrenceFormProps {
   label: string;
-  values: BasicSchema[];
-  onChange: (values: []) => void;
-  nodes: NodeType[];
+  value: BasicSchema[] | undefined;
+  onChange: (values: BasicSchema[]) => void;
+  nodes: NodeType[] | undefined;
   dynamic?: boolean;
 }
 
-export const ReferenceForm = (props: RefrenceFormProps) => {
-  const { label, values, onChange, nodes, dynamic = false } = props;
-
+export const ReferenceFormRaw = (props: RefrenceFormProps) => {
+  const { label, value, onChange, nodes, dynamic = false } = props;
+  // const formRef = useRef<FormInstance>(null);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldValue('variables', values);
-  }, []);
+    form.setFieldValue('variables', value || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
-  const options = nodes.map((node) => {
-    return {
-      label: node.data.name,
-      value: node.data.id,
-      children: node.data?.config?.outputs?.map((output) => {
-        return {
-          label: output.name,
-          value: output.name,
-        };
-      }),
-    };
-  });
+  const options =
+    nodes?.map((node) => {
+      return {
+        label: node.data.name,
+        value: node.data.id,
+        children: node.data?.config?.outputs?.map((output) => {
+          return {
+            label: output.name,
+            value: output.name,
+          };
+        }),
+      };
+    }) || [];
 
   return (
-    <CollapseWrapper
-      label={label}
-      content={
-        <Form
-          form={form}
-          autoComplete="off"
-          onValuesChange={(_, allFields) => {
-            form.validateFields().then(() => {
-              if (allFields.variables)
-                onChange(
-                  allFields.variables.filter((item: any) => item !== undefined),
-                );
-            });
-          }}
-        >
-          <div className="mb-[-10px]">
-            <Form.List name="variables">
-              {() => (
-                <>
-                  <Space style={{ display: 'flex' }} align="baseline">
-                    <Form.Item className="w-[240px]">参数名</Form.Item>
-                    <Form.Item className="w-[200px]">变量值</Form.Item>
-                  </Space>
-                </>
-              )}
-            </Form.List>
-          </div>
+    <CollapseWrapper className="mb-[20px]" label={label}>
+      <Form
+        initialValues={{ variables: value }}
+        autoComplete="off"
+        onValuesChange={(changedValues, allFields) => {
+          onChange(
+            allFields.variables.map((item: any) => {
+              if (!item) {
+                return {};
+              }
+              return item;
+            }),
+          );
+        }}
+      >
+        <div className="mb-[-20px]">
           <Form.List name="variables">
-            {(fields, { add, remove }) => (
+            {() => (
               <>
-                {fields.map(({ key, name, ...restField }) => (
-                  <Space key={key} style={{ display: 'flex' }} align="baseline">
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'name']}
-                      className="w-[240px]"
-                      rules={[{ required: true, message: '变量名不可为空' }]}
-                    >
-                      <Input placeholder="变量名" disabled={!dynamic} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'value']}
-                      className="w-[200px]"
-                    >
-                      <ReferenceSelect refOptions={options} />
-                    </Form.Item>
-
-                    {dynamic && (
-                      <MinusCircleOutlined
-                        className="cursor-pointer"
-                        onClick={() => remove(name)}
-                      />
-                    )}
-                  </Space>
-                ))}
-                {dynamic && (
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      添加变量
-                    </Button>
-                  </Form.Item>
-                )}
+                <Space style={{ display: 'flex' }} align="baseline">
+                  <Form.Item className="w-[120px]">参数名</Form.Item>
+                  <Form.Item>变量值</Form.Item>
+                </Space>
               </>
             )}
           </Form.List>
-        </Form>
-      }
-    />
+        </div>
+        <Form.List name="variables">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space key={key} style={{ display: 'flex' }} align="baseline">
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'name']}
+                    className="w-[120px]"
+                    rules={[{ required: true, message: '变量名不可为空' }]}
+                  >
+                    <Input placeholder="变量名" disabled={!dynamic} />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'value']}
+                    className="w-[200px]"
+                  >
+                    <ReferenceSelect refOptions={options} />
+                  </Form.Item>
+
+                  {dynamic && (
+                    <HoverBlock
+                      onClick={() => remove(name)}
+                      className="bg-gray-100 hover:bg-red-500/5 hover:text-red-400"
+                    >
+                      <RiDeleteBin7Line
+                        className="w-[14px] h-[14px]"
+                        // onClick={() => remove(name)}
+                      />
+                    </HoverBlock>
+                  )}
+                </Space>
+              ))}
+              {dynamic && (
+                <Button
+                  className="w-[100%]"
+                  onClick={() => add()}
+                  icon={<RiAddLine className="w-4" />}
+                >
+                  添加变量
+                </Button>
+              )}
+            </>
+          )}
+        </Form.List>
+      </Form>
+    </CollapseWrapper>
   );
 };
+
+export const ReferenceForm = memo(ReferenceFormRaw, (prev, next) => {
+  return prev.nodes === next.nodes && prev.value === next.value;
+});

@@ -1,4 +1,4 @@
-import { NodeDataType } from '@/interfaces/flow';
+import type { NodeDataType } from '@/interfaces/flow';
 import { Input } from 'antd';
 import React from 'react';
 
@@ -39,13 +39,13 @@ export const NodesPanel = (props: NodesPanelProps) => {
         <Input.Search
           placeholder="Search"
           onChange={(e) => {
-            nodes.filter((node) => node.name.includes(e.target.value));
+            nodes.filter((node) => node.name?.includes(e.target.value));
           }}
         />
       )}
       {nodes.sort().map((node) => (
         <div
-          className="m-2 p-2 bg-gray-50 rounded-xl cursor-pointer flex items-center"
+          className="m-3 p-2 bg-white rounded-xl cursor-pointer flex items-center shadow-card hover:shadow-card-lg"
           key={node.id}
           draggable
           onDragStart={(event) =>

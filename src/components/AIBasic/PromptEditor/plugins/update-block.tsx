@@ -1,7 +1,9 @@
 import { useEventEmitterContextContext } from '@/context/event-emitter';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $insertNodes } from 'lexical';
+
 import { textToEditorState } from '../utils';
+
 import { CustomTextNode } from './custom-text/node';
 
 export const PROMPT_EDITOR_UPDATE_VALUE_BY_EVENT_EMITTER =
