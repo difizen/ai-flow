@@ -1,9 +1,7 @@
 import { EllipsisOutlined, PlayCircleFilled } from '@ant-design/icons';
 import React from 'react';
-export const NodeHeader = (props: {
-  icon: React.JSX.Element;
-  name: string;
-}) => {
+
+export const NodeHeader = (props: { icon: React.JSX.Element; name: string }) => {
   const { icon, name } = props;
   return (
     <div className="flex items-center justify-between p-3 text-xs">

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 type PromptMenuItemMenuItemProps = {
   icon: JSX.Element;
@@ -26,19 +26,21 @@ export const PromptMenuItem = memo(
         flex items-center px-3 h-6 cursor-pointer hover:bg-gray-50 rounded-md
         ${isSelected && !disabled && '!bg-gray-50'}
         ${
-          disabled
-            ? 'cursor-not-allowed opacity-30'
-            : 'hover:bg-gray-50 cursor-pointer'
+          disabled ? 'cursor-not-allowed opacity-30' : 'hover:bg-gray-50 cursor-pointer'
         }
       `}
         tabIndex={-1}
         ref={setRefElement}
         onMouseEnter={() => {
-          if (disabled) return;
+          if (disabled) {
+            return;
+          }
           onMouseEnter();
         }}
         onClick={() => {
-          if (disabled) return;
+          if (disabled) {
+            return;
+          }
           onClick();
         }}
       >

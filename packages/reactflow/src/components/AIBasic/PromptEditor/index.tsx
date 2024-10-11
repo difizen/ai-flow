@@ -6,14 +6,15 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import type { EditorState } from 'lexical';
 import { $getRoot, TextNode } from 'lexical';
-import React, { type FC } from 'react';
-import ComponentPickerBlock from './plugins/component-picker-block';
+import React, { memo, type FC } from 'react';
+
+import ComponentPickerBlock from './plugins/component-picker-block/index';
 import { CustomTextNode } from './plugins/custom-text/node';
 import OnBlurBlock from './plugins/on-blur-or-focus-block';
 import Placeholder from './plugins/placeholder';
 import UpdateBlock from './plugins/update-block';
-import VariableBlock from './plugins/variable-block';
-import VariableValueBlock from './plugins/variable-value-block';
+import VariableBlock from './plugins/variable-block/index';
+import VariableValueBlock from './plugins/variable-value-block/index';
 import { VariableValueBlockNode } from './plugins/variable-value-block/node';
 import type { ExternalToolBlockType, VariableBlockType } from './types';
 import { textToEditorState } from './utils';
@@ -34,7 +35,7 @@ export type PromptEditorProps = {
   externalToolBlock?: ExternalToolBlockType;
 };
 
-const PromptEditor: FC<PromptEditorProps> = ({
+const PromptEditorRaw: FC<PromptEditorProps> = ({
   instanceId,
   compact,
   className,
@@ -74,12 +75,14 @@ const PromptEditor: FC<PromptEditorProps> = ({
         .join('\n');
     });
 
-    if (onChange) onChange(text);
+    if (onChange) {
+      onChange(text);
+    }
   };
 
   return (
     <LexicalComposer initialConfig={{ ...initialConfig, editable }}>
-      <div className="relative h-full nodrag">
+      <div className="relative h-full nodrag nowheel">
         <RichTextPlugin
           contentEditable={
             <ContentEditable
@@ -96,7 +99,7 @@ const PromptEditor: FC<PromptEditorProps> = ({
               compact={compact}
             />
           }
-          ErrorBoundary={LexicalErrorBoundary}
+          ErrorBoundary={LexicalErrorBoundary as any}
         />
         <ComponentPickerBlock
           triggerString="/"
@@ -124,4 +127,4 @@ const PromptEditor: FC<PromptEditorProps> = ({
   );
 };
 
-export default PromptEditor;
+export const PromptEditor = memo(PromptEditorRaw);

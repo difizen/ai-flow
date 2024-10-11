@@ -1,26 +1,20 @@
-import type {
-  EditorConfig,
-  LexicalNode,
-  NodeKey,
-  SerializedTextNode,
-} from 'lexical';
+import type { EditorConfig, LexicalNode, NodeKey, SerializedTextNode } from 'lexical';
 import { $applyNodeReplacement, TextNode } from 'lexical';
 
 export class VariableValueBlockNode extends TextNode {
-  static getType(): string {
+  static override getType(): string {
     return 'variable-value-block';
   }
 
-  static clone(node: VariableValueBlockNode): VariableValueBlockNode {
+  static override clone(node: VariableValueBlockNode): VariableValueBlockNode {
     return new VariableValueBlockNode(node.__text, node.__key);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(text: string, key?: NodeKey) {
     super(text, key);
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  override createDOM(config: EditorConfig): HTMLElement {
     const element = super.createDOM(config);
     element.classList.add(
       'inline-flex',
@@ -34,8 +28,7 @@ export class VariableValueBlockNode extends TextNode {
     return element;
   }
 
-  static importJSON(serializedNode: SerializedTextNode): TextNode {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  static override importJSON(serializedNode: SerializedTextNode): TextNode {
     const node = $createVariableValueBlockNode(serializedNode.text);
     node.setFormat(serializedNode.format);
     node.setDetail(serializedNode.detail);
@@ -44,7 +37,7 @@ export class VariableValueBlockNode extends TextNode {
     return node;
   }
 
-  exportJSON(): SerializedTextNode {
+  override exportJSON(): SerializedTextNode {
     return {
       detail: this.getDetail(),
       format: this.getFormat(),
@@ -56,14 +49,12 @@ export class VariableValueBlockNode extends TextNode {
     };
   }
 
-  canInsertTextBefore(): boolean {
+  override canInsertTextBefore(): boolean {
     return false;
   }
 }
 
-export function $createVariableValueBlockNode(
-  text = '',
-): VariableValueBlockNode {
+export function $createVariableValueBlockNode(text = ''): VariableValueBlockNode {
   return $applyNodeReplacement(new VariableValueBlockNode(text));
 }
 

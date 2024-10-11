@@ -1,12 +1,13 @@
-import { BasicSchema } from '@/interfaces/flow';
+import type { BasicSchema } from '@/interfaces/flow';
 import {
   CaretRightOutlined,
   MinusCircleOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 import { Button, Checkbox, Collapse, Form, Input, Space } from 'antd';
-import React, { useEffect } from 'react';
-import { SelectInNode } from '../AIBasic/SelectInNode';
+import { useEffect } from 'react';
+
+import { SelectInNode } from '../AIBasic/SelectInNode/index';
 
 export interface VariableFormProps {
   label: string;
@@ -25,13 +26,13 @@ export const VariableForm = (props: VariableFormProps) => {
     showRequired = true,
   } = props;
   const onFinish = (values: any) => {
-    console.log('Received values of form:', values);
+    // console.log('Received values of form:', values);
   };
   const [form] = Form.useForm();
 
   useEffect(() => {
     form.setFieldValue('variables', values);
-  }, []);
+  }, [values]);
 
   return (
     <Collapse
@@ -51,14 +52,22 @@ export const VariableForm = (props: VariableFormProps) => {
               onFinish={onFinish}
               autoComplete="off"
               onValuesChange={(_, allFields) => {
-                form.validateFields().then(() => {
-                  if (allFields.variables)
-                    onChange(
-                      allFields.variables.filter(
-                        (item: any) => item !== undefined,
-                      ),
-                    );
-                });
+                form
+                  .validateFields()
+                  .then(() => {
+                    if (allFields.variables) {
+                      onChange(
+                        allFields.variables.map((item: any) => {
+                          if (!item) {
+                            return {};
+                          }
+                          return item;
+                        }),
+                      );
+                    }
+                    return;
+                  })
+                  .catch(console.error);
               }}
             >
               <div className="mb-[-10px]">
@@ -102,6 +111,7 @@ export const VariableForm = (props: VariableFormProps) => {
                           className="w-[200px]"
                         >
                           <SelectInNode
+                            disabled
                             options={[
                               { label: 'String', value: 'String' },
                               { label: 'Integer', value: 'Integer' },

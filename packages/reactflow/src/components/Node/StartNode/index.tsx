@@ -1,34 +1,24 @@
-import { VariableForm } from '@/components/VariableForm';
-import { NodeDataType } from '@/interfaces/flow';
-import { Collapse } from 'antd';
-import React from 'react';
-import { NodeWrapper } from '../NodeWrapper';
+import { VariableForm } from '@/components/VariableForm/index';
+import type { NodeType } from '@/interfaces/flow';
 
-type Props = {
-  data: NodeDataType;
-  selected: boolean;
-  xPos: number;
-  yPos: number;
-};
+import { NodeWrapper } from '../NodeWrapper/index';
 
-export const StartNode = (props: Props) => {
+const StartNode = (props: NodeType) => {
   const { data } = props;
 
   return (
     <NodeWrapper nodeProps={props} leftHandler={false}>
-      <Collapse>
-        {/* <SchemaConfigForm formSchema={mockSchema} /> */}
-
-        <VariableForm
-          label="输入"
-          showRequired={false}
-          dynamic={false}
-          values={data.config?.outputs || []}
-          onChange={(values) => {
-            console.log('qianyan', values);
-          }}
-        />
-      </Collapse>
+      <VariableForm
+        label="输入"
+        showRequired={false}
+        dynamic={false}
+        values={data.config?.outputs || []}
+        onChange={(values) => {
+          //
+        }}
+      />
     </NodeWrapper>
   );
 };
+
+export default StartNode;

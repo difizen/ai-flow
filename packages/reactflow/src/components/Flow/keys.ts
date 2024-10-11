@@ -1,5 +1,6 @@
 import isWrappedWithClass from '@/utils/wrappedClass';
 import { cloneDeep } from 'lodash';
+
 export function handleUndo(e: KeyboardEvent, undo: any) {
   if (!isWrappedWithClass(e, 'noflow')) {
     e.preventDefault();
@@ -33,7 +34,7 @@ export function handleDuplicate(
   e.preventDefault();
   e.stopPropagation();
   (e as unknown as Event).stopImmediatePropagation();
-  const selectedNode = nodes.filter((obj) => obj.selected);
+  const selectedNode = nodes.filter((obj: any) => obj.selected);
   if (selectedNode.length > 0) {
     paste(
       { nodes: selectedNode, edges: [] },
@@ -110,7 +111,7 @@ export function handleDelete(
     e.preventDefault();
     (e as unknown as Event).stopImmediatePropagation();
     takeSnapshot();
-    deleteNode(lastSelection.nodes.map((node) => node.id));
-    deleteEdge(lastSelection.edges.map((edge) => edge.id));
+    deleteNode(lastSelection.nodes.map((node: any) => node.id));
+    deleteEdge(lastSelection.edges.map((edge: any) => edge.id));
   }
 }

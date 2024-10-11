@@ -6,6 +6,7 @@ import {
   $isRangeSelection,
   $isTextNode,
 } from 'lexical';
+
 import { CustomTextNode } from './plugins/custom-text/node';
 import type { MenuTextMatch } from './types';
 
@@ -30,7 +31,9 @@ export function registerLexicalTextEntity<T extends TextNode>(
   };
 
   const textNodeTransform = (node: TextNode) => {
-    if (!node.isSimpleText()) return;
+    if (!node.isSimpleText()) {
+      return;
+    }
 
     const prevSibling = node.getPreviousSibling();
 
@@ -71,12 +74,13 @@ export function registerLexicalTextEntity<T extends TextNode>(
       }
     }
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       match = getMatch(text);
       let nextText = match === null ? '' : text.slice(match.end);
       text = nextText;
 
-      if (nextText === '') {
+      if (nextText === '' && currentNode) {
         const nextSibling = currentNode.getNextSibling();
 
         if ($isTextNode(nextSibling)) {
@@ -85,8 +89,11 @@ export function registerLexicalTextEntity<T extends TextNode>(
           const nextMatch = getMatch(nextText);
 
           if (nextMatch === null) {
-            if (isTargetNode(nextSibling)) replaceWithSimpleText(nextSibling);
-            else nextSibling.markDirty();
+            if (isTargetNode(nextSibling)) {
+              replaceWithSimpleText(nextSibling);
+            } else {
+              nextSibling.markDirty();
+            }
 
             return;
           } else if (nextMatch.start !== 0) {
@@ -96,34 +103,41 @@ export function registerLexicalTextEntity<T extends TextNode>(
       } else {
         const nextMatch = getMatch(nextText);
 
-        if (nextMatch !== null && nextMatch.start === 0) return;
+        if (nextMatch !== null && nextMatch.start === 0) {
+          return;
+        }
       }
 
-      if (match === null) return;
+      if (match === null) {
+        return;
+      }
 
       if (
         match.start === 0 &&
         $isTextNode(prevSibling) &&
         prevSibling.isTextEntity()
-      )
+      ) {
         continue;
+      }
 
       let nodeToReplace;
 
-      if (match.start === 0)
+      if (match.start === 0) {
         [nodeToReplace, currentNode] = currentNode.splitText(match.end);
-      else
+      } else {
         [, nodeToReplace, currentNode] = currentNode.splitText(
           match.start,
           match.end,
         );
+      }
 
       const replacementNode = createNode(nodeToReplace);
       replacementNode.setFormat(nodeToReplace.getFormat());
       nodeToReplace.replace(replacementNode);
 
-      // eslint-disable-next-line eqeqeq
-      if (currentNode == null) return;
+      if (currentNode === null) {
+        return;
+      }
     }
   };
 
@@ -154,7 +168,9 @@ export function registerLexicalTextEntity<T extends TextNode>(
     if ($isTextNode(nextSibling) && nextSibling.isTextEntity()) {
       replaceWithSimpleText(nextSibling); // This may have already been converted in the previous block
 
-      if (isTargetNode(node)) replaceWithSimpleText(node);
+      if (isTargetNode(node)) {
+        replaceWithSimpleText(node);
+      }
     }
   };
 
@@ -176,7 +192,9 @@ function getFullMatchOffset(
 ): number {
   let triggerOffset = offset;
   for (let i = triggerOffset; i <= entryText.length; i++) {
-    if (documentText.substr(-i) === entryText.substr(0, i)) triggerOffset = i;
+    if (documentText.substr(-i) === entryText.substr(0, i)) {
+      triggerOffset = i;
+    }
   }
   return triggerOffset;
 }
@@ -185,11 +203,17 @@ export function $splitNodeContainingQuery(
   match: MenuTextMatch,
 ): TextNode | null {
   const selection = $getSelection();
-  if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
+  if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
+    return null;
+  }
   const anchor = selection.anchor;
-  if (anchor.type !== 'text') return null;
+  if (anchor.type !== 'text') {
+    return null;
+  }
   const anchorNode = anchor.getNode();
-  if (!anchorNode.isSimpleText()) return null;
+  if (!anchorNode.isSimpleText()) {
+    return null;
+  }
   const selectionOffset = anchor.offset;
   const textContent = anchorNode.getTextContent().slice(0, selectionOffset);
   const characterOffset = match.replaceableString.length;
@@ -199,10 +223,15 @@ export function $splitNodeContainingQuery(
     characterOffset,
   );
   const startOffset = selectionOffset - queryOffset;
-  if (startOffset < 0) return null;
+  if (startOffset < 0) {
+    return null;
+  }
   let newNode;
-  if (startOffset === 0) [newNode] = anchorNode.splitText(selectionOffset);
-  else [, newNode] = anchorNode.splitText(startOffset, selectionOffset);
+  if (startOffset === 0) {
+    [newNode] = anchorNode.splitText(selectionOffset);
+  } else {
+    [, newNode] = anchorNode.splitText(startOffset, selectionOffset);
+  }
 
   return newNode;
 }

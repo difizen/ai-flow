@@ -1,16 +1,26 @@
-import { ReactFlowJsonObject, XYPosition } from '@xyflow/react';
+import type { ReactFlowJsonObject, XYPosition } from '@xyflow/react';
+import type { Node } from '@xyflow/react';
 
-export enum NodeTypeEnum {
-  'Start' = 'start',
-  'End' = 'end',
-  'LLM' = 'llm',
-  'Knowledge' = 'knowledge',
-  'Agent' = 'agent',
+export type NodeTypes =
+  | 'start'
+  | 'end'
+  | 'llm'
+  | 'knowledge'
+  | 'agent'
+  | 'tool'
+  | 'ifelse';
 
-  // 'Plugin' = 'plugin',
-  'Tool' = 'tool',
-  'IfElse' = 'ifelse',
-}
+// export enum NodeTypeEnum {
+//   'Start' = 'start',
+//   'End' = 'end',
+//   'LLM' = 'llm',
+//   'Knowledge' = 'knowledge',
+//   'Agent' = 'agent',
+
+//   // 'Plugin' = 'plugin',
+//   'Tool' = 'tool',
+//   'IfElse' = 'ifelse',
+// }
 
 export enum IfElseNodeCompareType {
   Equal = 'equal',
@@ -32,10 +42,23 @@ export interface RefValueType {
   };
 }
 
+export type ValueType = 'reference' | 'value';
+export interface ReferenceSchema {
+  type: 'reference';
+  content?: [string, string];
+}
+
+export interface ValueSchema {
+  type: 'value';
+  content?: string;
+}
+
+export type SchemaValueType = ReferenceSchema | ValueSchema;
+
 export interface BasicSchema {
   type: string;
-  name?: string;
-  value?: LiteralValueType | RefValueType;
+  name: string;
+  value?: SchemaValueType;
   required?: boolean;
   // BasicSchema 对应 type = list，BasicSchema[] 对应 type = object
   schema?: BasicSchema | BasicSchema[];
@@ -45,37 +68,33 @@ export interface BasicSchema {
 export interface NodeDataConfigType {
   inputs?: {
     input_param: BasicSchema[];
-    [key: string]: BasicSchema[];
+    branches?: ConditionBranch[];
+    [key: string]: BasicSchema[] | BasicSchema | ConditionBranch[] | undefined;
   };
   outputs?: BasicSchema[];
 }
 
-// export interface NodeDataMetaType {
-//   name: string;
-//   icon?: string;
-//   description?: string;
-// }
+export interface NodeDataMetaType {
+  name: string;
+  icon?: string;
+  description?: string;
+}
 
-export interface NodeDataType {
-  id: string | number;
-  type: NodeTypeEnum;
+export interface NodeDataType extends Record<string, unknown> {
+  id: string;
+  type: NodeTypes;
   runResult?: {
     status: string;
     result?: any;
   };
-  name: string;
+  name?: string;
   icon?: string;
   description?: string;
   config?: NodeDataConfigType;
+  folded?: boolean;
 }
 
-export interface NodeType {
-  id: string;
-  position: XYPosition;
-  type: string;
-  data: NodeDataType;
-  selected?: boolean;
-}
+export type NodeType = Node<NodeDataType>;
 
 export type FlowType = {
   id: string;
@@ -83,7 +102,6 @@ export type FlowType = {
   icon?: string;
   description: string;
   data: ReactFlowJsonObject | null;
-  //
   updated_at?: string;
   date_created?: string;
   user_id?: string;
@@ -106,3 +124,22 @@ export type targetHandleType = {
   id: string;
   proxy?: { field: string; id: string };
 };
+
+export type CompareOperator = 'equal' | 'notequal' | 'blank';
+export type LogicOperator = 'and' | 'or';
+
+export interface ConditionBranch {
+  name: string;
+  logic?: LogicOperator;
+  conditions: {
+    compare: CompareOperator;
+    left: {
+      type: string;
+      content: SchemaValueType;
+    };
+    right: {
+      type: string;
+      content: SchemaValueType;
+    };
+  }[];
+}

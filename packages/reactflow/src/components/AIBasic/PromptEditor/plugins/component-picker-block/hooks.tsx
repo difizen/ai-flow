@@ -1,10 +1,12 @@
 import { AndroidFilled } from '@ant-design/icons';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $insertNodes } from 'lexical';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+
 import type { ExternalToolBlockType, VariableBlockType } from '../../types';
 import { $createCustomTextNode } from '../custom-text/node';
-import { INSERT_VARIABLE_VALUE_BLOCK_COMMAND } from '../variable-block';
+import { INSERT_VARIABLE_VALUE_BLOCK_COMMAND } from '../variable-block/index';
+
 import { PickerBlockMenuOption } from './menu';
 import { VariableMenuItem } from './variable-option';
 
@@ -15,7 +17,9 @@ export const useVariableOptions = (
   const [editor] = useLexicalComposerContext();
 
   const options = useMemo(() => {
-    if (!variableBlock?.variables) return [];
+    if (!variableBlock?.variables) {
+      return [];
+    }
 
     const baseOptions = variableBlock.variables.map((item) => {
       return new PickerBlockMenuOption({
@@ -43,7 +47,9 @@ export const useVariableOptions = (
         },
       });
     });
-    if (!queryString) return baseOptions;
+    if (!queryString) {
+      return baseOptions;
+    }
 
     const regex = new RegExp(queryString, 'i');
 
@@ -91,7 +97,9 @@ export const useExternalToolOptions = (
   const [editor] = useLexicalComposerContext();
 
   const options = useMemo(() => {
-    if (!externalToolBlockType?.externalTools) return [];
+    if (!externalToolBlockType?.externalTools) {
+      return [];
+    }
     const baseToolOptions = externalToolBlockType.externalTools.map((item) => {
       return new PickerBlockMenuOption({
         key: item.name,
@@ -125,7 +133,9 @@ export const useExternalToolOptions = (
         },
       });
     });
-    if (!queryString) return baseToolOptions;
+    if (!queryString) {
+      return baseToolOptions;
+    }
 
     const regex = new RegExp(queryString, 'i');
 

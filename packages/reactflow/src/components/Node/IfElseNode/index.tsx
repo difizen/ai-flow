@@ -1,25 +1,18 @@
-import { SelectInNode } from '@/components/AIBasic/SelectInNode';
-import { ReferenceSelect } from '@/components/ReferenceSelect';
-import { NodeDataType } from '@/interfaces/flow';
-import { useFlowStore } from '@/stores/useFlowStore';
-import { Form } from 'antd';
-import React from 'react';
-import { NodeWrapper } from '../NodeWrapper';
+import { ConditionForm } from '@/components/ConditionForm/index';
+import type { NodeType } from '@/interfaces/flow';
+import { useFlowStore } from '@/stores/flowStore';
 
-type Props = {
-  data: NodeDataType;
-  selected: boolean;
-  xPos: number;
-  yPos: number;
-};
+import { NodeWrapper } from '../NodeWrapper/index';
 
-export const IfElseNode = (props: Props) => {
+const IfElseNode = (props: NodeType) => {
   const { data } = props;
-  const [form] = Form.useForm();
-  const compare = Form.useWatch('compare', form);
-  const { findUpstreamNodes } = useFlowStore();
-  const upstreamNode = findUpstreamNodes(data.id.toString());
-  const options = upstreamNode.map((node) => {
+
+  const setNode = useFlowStore((state) => state.setNode);
+  const nodeLinkMap = useFlowStore((state) => state.nodeLinkMap);
+
+  const upstreamNodes = nodeLinkMap[data.id] || [];
+  const options = upstreamNodes.map((n) => {
+    const node = n;
     return {
       label: node.data.name,
       value: node.data.id,
@@ -35,36 +28,38 @@ export const IfElseNode = (props: Props) => {
   return (
     <NodeWrapper
       nodeProps={props}
+      className="w-[610px]"
       rightHandlerConfig={[
-        { id: 'IF', style: { top: 110 } },
-        { id: 'ELSE', style: { bottom: 34, top: 'auto' } },
+        { id: 'branch-1', style: { top: 110 } },
+        { id: 'branch-default', style: { bottom: 34, top: 'auto' } },
       ]}
     >
       <>
         <div className="flex items-center gap-2 bg-gray-100 p-3 rounded-md mb-2">
           <div>
             <div className="ml-1 mb-2 font-medium">如果</div>
-            <Form form={form} layout="inline">
-              <Form.Item name="left">
-                <ReferenceSelect refOptions={options} />
-              </Form.Item>
-              <Form.Item name="compare">
-                <SelectInNode
-                  className="w-[80px]"
-                  defaultValue={'equal'}
-                  options={[
-                    { label: '等于', value: 'equal' },
-                    { label: '不等于', value: 'not_equal' },
-                    { label: '为空', value: 'blank' },
-                  ]}
-                />
-              </Form.Item>
-              {compare !== 'blank' && (
-                <Form.Item name="right">
-                  <ReferenceSelect refOptions={options} />
-                </Form.Item>
-              )}
-            </Form>
+            <ConditionForm
+              refOptions={options}
+              value={data.config?.inputs?.branches?.[0]}
+              onChange={(val) => {
+                setNode(data.id, (old) => ({
+                  ...old,
+                  data: {
+                    ...old.data,
+                    config: {
+                      ...(old.data['config'] as Record<string, any>),
+
+                      inputs: {
+                        ...(old.data['config'] as Record<string, any>)[
+                          'inputs'
+                        ],
+                        branches: [val],
+                      },
+                    },
+                  },
+                }));
+              }}
+            />
           </div>
         </div>
         <div className="bg-gray-100 p-3 rounded-md">
@@ -74,3 +69,5 @@ export const IfElseNode = (props: Props) => {
     </NodeWrapper>
   );
 };
+
+export default IfElseNode;

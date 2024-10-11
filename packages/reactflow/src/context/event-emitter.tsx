@@ -10,8 +10,7 @@ const EventEmitterContext = createContext<{
   eventEmitter: null,
 });
 
-export const useEventEmitterContextContext = () =>
-  useContext(EventEmitterContext);
+export const useEventEmitterContextContext = () => useContext(EventEmitterContext);
 
 type EventEmitterContextProviderProps = {
   children: React.ReactNode;
