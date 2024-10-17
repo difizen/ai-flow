@@ -1,4 +1,9 @@
-import type { FlowType, NodeType } from '@/interfaces/flow';
+import {
+  ControlMode,
+  NodePanelTypeEnum,
+  type NodePanelType,
+  type NodeType,
+} from '@/interfaces/flow';
 import { cleanEdges, getNodeId } from '@/utils/reactflowUtils';
 import type {
   Connection,
@@ -13,6 +18,7 @@ import type {
   XYPosition,
 } from '@xyflow/react';
 import { addEdge, applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
+import { produce } from 'immer';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
 
@@ -25,25 +31,15 @@ interface PanePosition extends XYPosition {
 }
 
 export interface FlowStoreType {
-  currentFlow: FlowType | undefined;
-  setCurrentFlow: (flow: FlowType | undefined) => void;
-  updateCurrentFlow: ({
-    nodes,
-    edges,
-    viewport,
-  }: {
-    nodes?: Node[];
-    edges?: Edge[];
-    viewport?: Viewport;
-  }) => void;
   nodes: Node[];
   edges: Edge[];
-  initFlow: (grapg: { nodes: Node[]; edges: Edge[] }) => {
+  initFlow: (graph: { nodes: Node[]; edges: Edge[] }) => {
     nodes: Node[];
     edges: Edge[];
   };
-  onNodesChange: OnNodesChange;
+
   onEdgesChange: OnEdgesChange;
+  onNodesChange: OnNodesChange;
 
   reactFlowInstance: ReactFlowInstance | null;
   setReactFlowInstance: (newState: ReactFlowInstance) => void;
@@ -75,15 +71,29 @@ export interface FlowStoreType {
   setNodeFolded: (id: string, folded: boolean) => void;
   nodeLinkMap: Record<string, Node[]>;
   calculateNodeLinkMap: () => void;
+  nodePanel: NodePanelType;
+  setNodePanel: (panel: NodePanelType) => void;
+  controlMode: ControlMode;
+  setControlMode: (mode: ControlMode) => void;
+  handleNodeEdited: (nodeId: string, cancelEdited?: boolean) => void;
 }
 
 export const useFlowStore = create<FlowStoreType>((set, get) => {
-  // DFS 查找上游节点
-
   return {
     nodes: [],
     edges: [],
-
+    nodePanel: NodePanelTypeEnum.Panel,
+    setNodePanel: (panel: NodePanelType) => {
+      set({ nodePanel: panel });
+    },
+    controlMode:
+      localStorage.getItem('ai-workflow-operation-mode') === ControlMode.Pointer
+        ? ControlMode.Pointer
+        : ControlMode.Hand,
+    setControlMode: (mode: ControlMode) => {
+      set({ controlMode: mode });
+      localStorage.setItem('ai-workflow-operation-mode', mode);
+    },
     findUpstreamNodes: (targetNode: string): Node[] => {
       const adjList: AdjacencyList = {};
 
@@ -149,9 +159,13 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       };
     },
     onNodesChange: (changes: NodeChange[]) => {
-      set({
-        nodes: applyNodeChanges(changes, get().nodes),
-      });
+      const newChanges = changes.filter((change) => change.type !== 'position');
+
+      if (newChanges) {
+        set({
+          nodes: applyNodeChanges(newChanges, get().nodes),
+        });
+      }
     },
     setNodeFolded: (id: string, folded: boolean) => {
       get().setNode(id, (old: Node) => {
@@ -210,8 +224,10 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
         edges: newEdges,
         nodes: newChange,
       });
-    },
 
+      // const { autoSaveFlow } = useFlowsManagerStore.getState();
+      // autoSaveFlow?.();
+    },
     setEdges: (change) => {
       const newChange =
         typeof change === 'function' ? change(get().edges) : change;
@@ -223,7 +239,6 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
     getNode: (id: string) => {
       return get().nodes.find((node) => node.id === id);
     },
-
     onConnect: (connection) => {
       let newEdges: Edge[] = [];
       get().setEdges((oldEdges) => {
@@ -375,27 +390,6 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       // get().setEdges(newEdges);
     },
 
-    currentFlow: undefined,
-    setCurrentFlow: (flow) => {
-      set({ currentFlow: flow });
-    },
-    updateCurrentFlow: ({ nodes, edges }) => {
-      set({
-        currentFlow: {
-          ...get().currentFlow!,
-          data: {
-            nodes: nodes ?? get().currentFlow?.data?.nodes ?? [],
-            edges: edges ?? get().currentFlow?.data?.edges ?? [],
-            viewport: get().currentFlow?.data?.viewport ?? {
-              x: 0,
-              y: 0,
-              zoom: 1,
-            },
-          },
-        },
-      });
-    },
-
     lastCopiedSelection: null,
     setLastCopiedSelection: (newSelection, isCrop = false) => {
       if (isCrop && newSelection) {
@@ -425,6 +419,17 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       }
 
       set({ lastCopiedSelection: newSelection });
+    },
+
+    handleNodeEdited: (nodeId: string, cancelEdited?: boolean) => {
+      const newNodes = produce(get().nodes, (draft) => {
+        draft.forEach((node) => {
+          if (node.id === nodeId) node.data.edited = !cancelEdited;
+          else node.data.edited = false;
+        });
+      });
+
+      get().setNodes(newNodes);
     },
   };
 });

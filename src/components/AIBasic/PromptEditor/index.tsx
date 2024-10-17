@@ -128,3 +128,5 @@ const PromptEditorRaw: FC<PromptEditorProps> = ({
 };
 
 export const PromptEditor = memo(PromptEditorRaw);
+
+export * from './types';

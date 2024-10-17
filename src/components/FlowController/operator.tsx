@@ -5,8 +5,10 @@ import {
   RiArrowGoForwardLine,
   RiColorFilterLine,
   RiContractUpDownLine,
+  RiCursorLine,
   RiExpandUpDownLine,
   RiFullscreenLine,
+  RiHand,
   RiZoomInLine,
   RiZoomOutLine,
 } from '@remixicon/react';
@@ -14,27 +16,40 @@ import { useReactFlow, useViewport } from '@xyflow/react';
 import { Divider } from 'antd';
 import { memo, type HTMLAttributes } from 'react';
 
+import { ControlMode } from '@/interfaces/flow';
+import { useFlowStore } from '@/stores/flowStore';
+import React from 'react';
 import { Popup } from '../AIBasic/Popup/index';
 import { TipPopup } from '../AIBasic/TipPopup/index';
 
 interface HoverBlockProps extends HTMLAttributes<HTMLDivElement> {
   tooltip?: React.ReactNode;
   disabled?: boolean;
+  selected?: boolean;
 }
 
 export const HoverBlock = (props: HoverBlockProps) => {
-  const { children, className, tooltip, disabled = false } = props;
+  const {
+    children,
+    className,
+    tooltip,
+    disabled = false,
+    selected = false,
+  } = props;
 
   const Inner = (
     <div
       {...props}
       className={classNames(
         'flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer hover:bg-black/5',
-        className,
         disabled ? 'cursor-not-allowed opacity-50' : '',
+        selected && 'bg-blue-400/20 hover:bg-blue-400/20',
+        className,
       )}
     >
-      {children}
+      <div className={selected ? 'text-blue-400 text:bg-blue-400' : ''}>
+        {children}
+      </div>
     </div>
   );
 
@@ -63,10 +78,13 @@ const OperatorRaw = () => {
   const undo = useFlowsManagerStore((state) => state.undo);
   const redo = useFlowsManagerStore((state) => state.redo);
   const hasPast = useFlowsManagerStore((state) => state.hasPast);
-
   const hasFuture = useFlowsManagerStore((state) => state.hasFuture);
   const autoLayout = useFlowsManagerStore((state) => state.autoLayout);
   const setNodesFolded = useFlowsManagerStore((state) => state.setNodesFolded);
+  const takeSnapshot = useFlowsManagerStore((state) => state.takeSnapshot);
+
+  const setControlMode = useFlowStore((state) => state.setControlMode);
+  const controlMode = useFlowStore((state) => state.controlMode);
 
   return (
     <div className="flex items-center mt-1 gap-2 absolute left-4 bottom-4 z-[9]">
@@ -140,6 +158,28 @@ const OperatorRaw = () => {
           >
             <RiArrowGoForwardLine className="w-4 h-4" />
           </HoverBlock>
+
+          <Divider type="vertical" className="mx-1" />
+          <HoverBlock
+            selected={controlMode === ControlMode.Pointer}
+            tooltip="指针模式"
+            onClick={(e) => {
+              e.stopPropagation();
+              setControlMode(ControlMode.Pointer);
+            }}
+          >
+            <RiCursorLine className="w-4 h-4" />
+          </HoverBlock>
+          <HoverBlock
+            selected={controlMode === ControlMode.Hand}
+            tooltip="手模式"
+            onClick={(e) => {
+              e.stopPropagation();
+              setControlMode(ControlMode.Hand);
+            }}
+          >
+            <RiHand className="w-4 h-4" />
+          </HoverBlock>
           <Divider type="vertical" className="mx-1" />
           <HoverBlock
             tooltip="折叠节点"
@@ -165,6 +205,7 @@ const OperatorRaw = () => {
             onClick={(e) => {
               e.stopPropagation();
               autoLayout();
+              takeSnapshot();
             }}
           >
             <RiColorFilterLine className="w-4 h-4" />

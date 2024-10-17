@@ -1,6 +1,6 @@
 import { PopoverInNode } from '@/components/AIBasic/PopoverInNode/index';
 import { HoverBlock } from '@/components/FlowController/operator';
-import type { NodeType } from '@/interfaces/flow';
+import { NodePanelTypeEnum, type NodeType } from '@/interfaces/flow';
 import { useFlowStore } from '@/stores/flowStore';
 import classNames from '@/utils/classnames';
 import {
@@ -11,10 +11,11 @@ import {
 } from '@remixicon/react';
 import { Handle, Position } from '@xyflow/react';
 import React from 'react';
+import { PanelComponentMap } from '..';
 
 export const NodeWrapper = (props: {
   nodeProps: NodeType;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   leftHandler?: boolean;
   rightHandler?: boolean;
   rightHandlerConfig?: {
@@ -26,6 +27,7 @@ export const NodeWrapper = (props: {
   extra?: React.ReactNode;
   folded?: boolean;
   className?: string;
+  onClick?: () => void;
 }) => {
   const {
     nodeProps,
@@ -37,48 +39,56 @@ export const NodeWrapper = (props: {
     name,
     extra,
     className,
+    onClick,
   } = props;
   const { name: defaultName, description, icon: defaultIcon } = nodeProps.data;
-
+  const nodePanel = useFlowStore((state) => state.nodePanel);
   const handlerClasses =
     'w-3 h-3 border-blue-500 rounded-full border-2 bg-white';
 
   const setNodeFolded = useFlowStore((state) => state.setNodeFolded);
 
+  const Panel = PanelComponentMap[nodeProps.type!];
+
+  const hasNodeContent =
+    children || (nodePanel === NodePanelTypeEnum.InNode && Panel);
+
   return (
     <div
       className={classNames(
         'relative flex flex-col border-2 justify-center rounded-xl bg-white shadow-lg p-5 hover:shadow-2xl min-w-[300px] max-w-[500px]',
-        nodeProps.selected
+        nodeProps.selected || nodeProps.data.edited
           ? 'border-blue-500 shadow-2xl'
           : 'border-transparent',
-        // nodeProps.data.folded ? 'w-[320px]' : 'w-[520px]',
         className,
       )}
+      onClick={onClick}
     >
       {nodeProps.selected && (
         <div className="absolute right-0 -top-10 flex items-center text-gray-500 bg-white rounded-lg p-[2px]">
-          <HoverBlock
-            tooltip={
-              <div className="text-[15px] font-semibold">
-                {nodeProps.data.folded ? '展开' : '折叠'}
-              </div>
-            }
-            onClick={() =>
-              setNodeFolded(
-                nodeProps.data.id,
-                nodeProps.data.folded === undefined
-                  ? true
-                  : !nodeProps.data.folded,
-              )
-            }
-          >
-            {nodeProps.data.folded ? (
-              <RiExpandUpDownLine className="w-4" />
-            ) : (
-              <RiContractUpDownLine className="w-4" />
-            )}
-          </HoverBlock>
+          {hasNodeContent && (
+            <HoverBlock
+              tooltip={
+                <div className="text-[15px] font-semibold">
+                  {nodeProps.data.folded ? '展开' : '折叠'}
+                </div>
+              }
+              onClick={() =>
+                setNodeFolded(
+                  nodeProps.data.id,
+                  nodeProps.data.folded === undefined
+                    ? true
+                    : !nodeProps.data.folded,
+                )
+              }
+            >
+              {nodeProps.data.folded ? (
+                <RiExpandUpDownLine className="w-4" />
+              ) : (
+                <RiContractUpDownLine className="w-4" />
+              )}
+            </HoverBlock>
+          )}
           <HoverBlock
             tooltip={<div className="text-[15px] font-semibold">测试节点</div>}
           >
@@ -160,7 +170,14 @@ export const NodeWrapper = (props: {
           <div className="w-full pb-2 text-sm truncate">{description}</div>
         </div>
       )}
-      {!nodeProps.data.folded && <div className="pt-2">{children}</div>}
+      {!nodeProps.data.folded && hasNodeContent && (
+        <div className="pt-2">
+          {children}
+          {nodePanel === NodePanelTypeEnum.InNode && (
+            <Panel data={nodeProps.data} />
+          )}
+        </div>
+      )}
     </div>
   );
 };

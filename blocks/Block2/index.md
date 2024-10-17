@@ -1,6 +1,6 @@
 ---
-title: Flow
-group: { title: 'flow样板间', order: 2 }
+title: Flow2
+group: { title: 'flow样板间2', order: 2 }
 toc: menu
 ---
 

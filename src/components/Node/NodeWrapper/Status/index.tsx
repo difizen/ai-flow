@@ -1,5 +1,7 @@
+import { PopoverInNode } from '@/components/AIBasic/PopoverInNode';
 import classNames from '@/utils/classnames';
-import { Popover, Tag } from 'antd';
+import { Tag } from 'antd';
+import React from 'react';
 
 export type RunStatusTypes = 'success' | 'processing' | 'warning' | 'error';
 
@@ -41,7 +43,7 @@ export const NodeStatus = (props: RunResStatus) => {
     <div
       className={classNames(
         StatusInfo.Cssclsname,
-        'h-10 flex items-center justify-between px-3',
+        'h-10 flex items-center justify-between px-3 mb-2 rounded-xl',
       )}
     >
       <div className="flex items-center gap-2 text-xs">
@@ -49,7 +51,7 @@ export const NodeStatus = (props: RunResStatus) => {
 
         <Tag color="success">{`${runDuration}s`}</Tag>
       </div>
-      <Popover
+      <PopoverInNode
         placement="right"
         trigger={'click'}
         className="nocopy nodelete nodrag noundo"
@@ -61,7 +63,7 @@ export const NodeStatus = (props: RunResStatus) => {
         }
       >
         <span className="text-xs text-blue-500 cursor-pointer">运行结果</span>
-      </Popover>
+      </PopoverInNode>
     </div>
   );
 };

@@ -7,7 +7,7 @@ stages:
 jobs:
   ci-engines-default:
     stage: run
-    component: node-test
+    component: node-test-alinux
     id: ci-engines-default
     inputs:
       resourceClass: M

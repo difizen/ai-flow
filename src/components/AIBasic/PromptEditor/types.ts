@@ -1,4 +1,4 @@
-export type Option = {
+export type VariableOption = {
   value: string;
   name: string;
 };
@@ -12,7 +12,7 @@ export type ExternalToolOption = {
 
 export type VariableBlockType = {
   show?: boolean;
-  variables?: Option[];
+  variables?: VariableOption[];
 };
 
 export type ExternalToolBlockType = {

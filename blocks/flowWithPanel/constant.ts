@@ -1,11 +1,3 @@
-import type { NodeDataType, NodeTypes } from '@/interfaces/flow';
-import yaml from 'js-yaml';
-import type { FC } from 'react';
-
-import Flow from '../Flow/index';
-import { CustomNode } from '../Node/index';
-import { NodesPanel } from '../NodePanel/index';
-
 import agentIcon from './icons/agent.svg';
 import endIcon from './icons/end.svg';
 import ifelseIcon from './icons/ifelse.svg';
@@ -14,7 +6,7 @@ import llmIcon from './icons/llm.svg';
 import startIcon from './icons/start.svg';
 import toolIcon from './icons/tool.svg';
 
-const iconMap = {
+export const iconMap = {
   start: startIcon,
   end: endIcon,
   llm: llmIcon,
@@ -24,7 +16,7 @@ const iconMap = {
   ifelse: ifelseIcon,
 };
 
-const templateNodeYaml = `
+export const templateNodeYaml = `
 - id: 1
   name: 开始节点
   description: 工作流的起始节点，用于设定启动工作流需要的信息
@@ -195,35 +187,3 @@ const templateNodeYaml = `
                 value:
                   type: reference
 `;
-
-export const NodeSchemaParser = (obj: Record<string, any>) => {
-  obj['config'] = obj['data'];
-  const type = obj['type'];
-  obj['icon'] =
-    iconMap[type as keyof typeof iconMap] ||
-    'https://mdn.alipayobjects.com/huamei_xbkogb/afts/img/A*PzmdRpvZz58AAAAAAAAAAAAADqarAQ/original';
-
-  delete obj['data'];
-};
-
-const nodeTypes: Record<NodeTypes, FC<any>> = {
-  ['CUSTOM_NODE']: CustomNode,
-};
-
-export const FlowWithPanel = (props: { toolbar?: React.ReactNode }) => {
-  const { toolbar } = props;
-  const templateNodes = yaml.load(templateNodeYaml);
-  (templateNodes as Record<string, any>[]).forEach((item) => {
-    NodeSchemaParser(item);
-  });
-
-  return (
-    <div className="flex flex-1">
-      <NodesPanel
-        className="w-[200px] z-10 bg-gray-50 shadow-lg"
-        nodes={templateNodes as NodeDataType[]}
-      />
-      <Flow classNames="flex-1" nodeTypes={nodeTypes} toolbar={toolbar} />
-    </div>
-  );
-};
