@@ -24,6 +24,7 @@ import React, {
   useState,
 } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import CustomConnectionLine from '../CustomEdge/costom-connection-line';
 
 import CustomEdge from '../CustomEdge/index';
 import { Operator } from '../FlowController/operator';
@@ -318,6 +319,7 @@ function Flow(props: FlowProps) {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           disableKeyboardA11y={true}
+          connectionLineComponent={CustomConnectionLine}
           onDrop={onDrop}
           onDragOver={onDragOver}
           maxZoom={2}

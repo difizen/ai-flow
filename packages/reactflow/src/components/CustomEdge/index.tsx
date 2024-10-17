@@ -1,10 +1,10 @@
 import { useFlowStore } from '@/stores/flowStore';
 import type { EdgeProps } from '@xyflow/react';
 import { BaseEdge, getBezierPath, MarkerType } from '@xyflow/react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-const EdgeColor = {
-  Default: '#9ca3af',
+export const EdgeColor = {
+  Default: '#D0D5DD',
   Selected: '#3b82f6',
 };
 
@@ -59,7 +59,7 @@ export default function CustomEdge({
         style={{
           ...style,
           stroke: edgeColor,
-          strokeWidth: 2,
+          strokeWidth: 2.5,
         }}
       />
       {/* {selected && (
