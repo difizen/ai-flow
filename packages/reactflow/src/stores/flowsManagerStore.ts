@@ -22,6 +22,11 @@ interface FlowsManagerStoreType {
   redo: () => void;
   takeSnapshot: () => void;
   setNodesFolded: (folded: boolean) => void;
+  saveFlow: () => void;
+  setSaveFlow: (saveFlow: () => void) => void;
+  savedAt: string;
+  setSavedAt: (savedAt: string) => void;
+  initializeAutoSaveFlow: () => void;
 }
 
 export type UseUndoRedoOptions = {
@@ -43,7 +48,7 @@ let past: Snap[] = [];
 
 let future: Snap[] = [];
 
-// auto save & redo undo
+// flow 的基本操作：撤销重做、快照生产、自动布局、初始化
 export const useFlowsManagerStore = create<FlowsManagerStoreType>(
   (set, get) => {
     return {
@@ -68,6 +73,7 @@ export const useFlowsManagerStore = create<FlowsManagerStoreType>(
         }).then((res) => {
           if (res) {
             const { reactFlowInstance } = useFlowStore.getState();
+
             return reactFlowInstance?.fitView();
           }
           return;
@@ -75,10 +81,15 @@ export const useFlowsManagerStore = create<FlowsManagerStoreType>(
       },
       autoSaving: true,
       saveLoading: false,
+      saveFlow: () => {
+        get().setSavedAt(new Date().toISOString());
+      },
       setNodesFolded: (folded: boolean) => {
         const { setNodeFolded, nodes } = useFlowStore.getState();
         nodes.forEach((n) => setNodeFolded(n.id, folded));
+        get().takeSnapshot();
       },
+      setSaveFlow: (saveFlow: () => void) => set({ saveFlow }),
       setSaveLoading: (saveLoading: boolean) => set({ saveLoading }),
       setAutoSaving: (autoSaving: boolean) => set({ autoSaving }),
       autoSavingInterval: SAVE_DEBOUNCE_TIME,
@@ -91,10 +102,12 @@ export const useFlowsManagerStore = create<FlowsManagerStoreType>(
       hasFuture: () => {
         return future && future.length > 0;
       },
+      savedAt: '未保存',
+      setSavedAt: (savedAt: string) => set({ savedAt }),
       initializeAutoSaveFlow: () => {
         const interval = get().autoSavingInterval;
         const autoSaveFlow = debounce(() => {
-          console.log('Auto-saving...');
+          get().saveFlow();
           // 在这里执行自动保存的逻辑
         }, interval);
         set({ autoSaveFlow });
@@ -102,8 +115,6 @@ export const useFlowsManagerStore = create<FlowsManagerStoreType>(
 
       // redo undo
       takeSnapshot: () => {
-        // const currentFlowId = get().currentFlowId;
-        // push the current graph to the past state
         const flowStore = useFlowStore.getState();
         const newState = {
           nodes: cloneDeep(flowStore.nodes),

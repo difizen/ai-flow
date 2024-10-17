@@ -1,12 +1,12 @@
-import type { NodeProps } from '@xyflow/react';
-import type { FC, ReactElement } from 'react';
-import { memo, type ComponentType } from 'react';
+import { type ComponentType } from 'react';
 
 import EndNode from './EndNode/index';
+import { EndPanel } from './EndNode/panel';
 import IfElseNode from './IfElseNode/index';
 import KnowledgeNode from './KnowledgeNode/index';
+import { KnowledgePanel } from './KnowledgeNode/panel';
 import LLMNode from './LLMNode/index';
-import { NodeWrapper } from './NodeWrapper/index';
+import { LLMPanel } from './LLMNode/panel';
 import StartNode from './StartNode/index';
 
 export { default as AgentNode } from './AgentNode/index';
@@ -45,26 +45,8 @@ export const NodeComponentMap: Record<string, ComponentType<any>> = {
   [BlockEnum.IfElse]: IfElseNode,
 };
 
-type BaseNodeProps = {
-  children: ReactElement;
-  nodeProps: NodeProps;
+export const PanelComponentMap: Record<string, ComponentType<any>> = {
+  [BlockEnum.LLM]: LLMPanel,
+  [BlockEnum.End]: EndPanel,
+  [BlockEnum.Knowledge]: KnowledgePanel,
 };
-
-const BaseNode: FC<BaseNodeProps> = ({ nodeProps, children }) => {
-  return <NodeWrapper nodeProps={nodeProps}>{children}</NodeWrapper>;
-};
-
-const CustomNodeRaw = (props: NodeProps) => {
-  const nodeData = props.data;
-  const NodeComponent = NodeComponentMap[nodeData['type'] as BlockEnum];
-
-  return (
-    <>
-      <BaseNode nodeProps={props}>
-        <NodeComponent />
-      </BaseNode>
-    </>
-  );
-};
-
-export const CustomNode = memo(CustomNodeRaw);

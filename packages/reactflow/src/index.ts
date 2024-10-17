@@ -1,7 +1,7 @@
 export type { Edge, Node } from '@xyflow/react';
 export { ContextWrapper } from './components/ContextWrapper/index';
 export { default as Flow } from './components/Flow';
-export { FlowWithPanel } from './components/FlowWithPanel/index';
+// export { FlowWithPanel } from './components/FlowWithPanel/index';
 export { NodesPanel } from './components/NodePanel/index';
 
 export { useFlowStore } from './stores/flowStore';
@@ -13,7 +13,8 @@ export { useKnowledgeStore } from './stores/useKnowledgeStore';
 export { useModelStore } from './stores/useModelStore';
 
 export * from './utils/index';
-import './tailwind.out.css';
+import './index.css';
 
 export * from './components/Node/index';
+export * from './constants/constant';
 export * from './interfaces/flow';

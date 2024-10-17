@@ -1,5 +1,8 @@
-import { EventEmitterContextProvider } from '@/context/event-emitter';
-import type { NodeDataType, NodeType } from '@/interfaces/flow';
+import {
+  ControlMode,
+  type NodeDataType,
+  type NodeType,
+} from '@/interfaces/flow';
 import { useFlowsManagerStore } from '@/stores/flowsManagerStore';
 import { useFlowStore } from '@/stores/flowStore';
 import { useShortcutsStore } from '@/stores/useShortcutsStore';
@@ -7,41 +10,76 @@ import { getNodeId } from '@/utils/reactflowUtils';
 import isWrappedWithClass from '@/utils/wrappedClass';
 import type {
   Connection,
+  Edge,
   OnSelectionChangeParams,
   SelectionDragHandler,
 } from '@xyflow/react';
 import { Background, MiniMap, ReactFlow } from '@xyflow/react';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  ComponentType,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import CustomEdge from '../CustomEdge/index';
 import { Operator } from '../FlowController/operator';
 
+import { EventEmitterContextProvider } from '@/context/event-emitter';
+import { useNodeInteractions } from '@/stores/nodeInteractions';
 import '@xyflow/react/dist/style.css';
+import { Header } from '../Header';
+import HelpLine from '../HelpLine';
+import { NodeComponentMap } from '../Node';
+import { Panel } from '../Panel';
 
 const edgeTypes = {
   custom: CustomEdge,
 };
 
 interface FlowProps {
-  miniMap?: boolean;
   classNames?: string;
-  nodeTypes: any;
+  /** show flow mini map */
+  miniMap?: boolean;
+  /** node types */
+  nodeTypes?: Record<string, ComponentType<any>>;
+  /** toolbar in flow*/
   toolbar: React.ReactNode;
+  /** initial graph */
+  initialGraph?: {
+    nodes: NodeType[];
+    edges: Edge[];
+  };
+
+  /** Auto save function */
+  onAutoSave?: () => Promise<void>;
 }
 
 function Flow(props: FlowProps) {
-  const { miniMap = true, classNames, nodeTypes, toolbar } = props;
+  const {
+    miniMap = true,
+    classNames,
+    nodeTypes = NodeComponentMap,
+    initialGraph,
+    toolbar,
+  } = props;
   const position = useRef({ x: 0, y: 0 });
   const [lastSelection, setLastSelection] =
     useState<OnSelectionChangeParams | null>(null);
-  const reactFlowWrapper = useRef<any>(null);
 
+  const controlMode = useFlowStore((state) => state.controlMode);
   const nodes = useFlowStore((state) => state.nodes);
+  const handleNodeEdited = useFlowStore((state) => state.handleNodeEdited);
   const edges = useFlowStore((state) => state.edges);
   const onNodesChange = useFlowStore((state) => state.onNodesChange);
   const onEdgesChange = useFlowStore((state) => state.onEdgesChange);
+  const initFlow = useFlowStore((state) => state.initFlow);
+
+  const onNodeDrag = useNodeInteractions((state) => state.onNodeDrag);
+  const onNodeDragEnd = useNodeInteractions((state) => state.onNodeDragEnd);
 
   const setReactFlowInstance = useFlowStore(
     (state) => state.setReactFlowInstance,
@@ -164,10 +202,6 @@ function Flow(props: FlowProps) {
   useHotkeys(deleteAction, handleDelete);
   useHotkeys('delete', handleDelete);
 
-  // const onLoad = useCallback(() => {
-  //   setTimeout(() => reactFlowInstance?.fitView(), 0);
-  // }, [reactFlowInstance]);
-
   const onConnectMod = useCallback(
     (params: Connection) => {
       takeSnapshot();
@@ -252,23 +286,35 @@ function Flow(props: FlowProps) {
     };
   }, [lastCopiedSelection, lastSelection, takeSnapshot]);
 
+  const autoSaving = useFlowsManagerStore((state) => state.autoSaving);
+  const initializeAutoSaveFlow = useFlowsManagerStore(
+    (state) => state.initializeAutoSaveFlow,
+  );
+  useEffect(() => {
+    if (initialGraph) {
+      initFlow(initialGraph);
+    }
+    if (autoSaving) {
+      initializeAutoSaveFlow();
+    }
+  }, []);
+
   return (
     <EventEmitterContextProvider>
-      <div
-        style={{ height: '100%', width: '100%' }}
-        className={classNames}
-        ref={reactFlowWrapper}
-      >
+      <div style={{ height: '100%', width: '100%' }} className={classNames}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
           onInit={setReactFlowInstance}
           onNodesChange={onNodesChange}
+          onNodeDrag={(_, node) => onNodeDrag(node)}
+          onNodeDragStop={(_, node) => onNodeDragEnd(node)}
           onEdgesChange={onEdgesChange}
           onNodeDragStart={onNodeDragStart}
           onSelectionChange={onSelectionChange}
           onSelectionDragStart={onSelectionDragStart}
           onConnect={onConnectMod}
+          onNodeClick={(_, node) => handleNodeEdited(node.id)}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           disableKeyboardA11y={true}
@@ -276,6 +322,8 @@ function Flow(props: FlowProps) {
           onDragOver={onDragOver}
           maxZoom={2}
           minZoom={0.1}
+          panOnDrag={controlMode === ControlMode.Hand}
+          selectionOnDrag={controlMode === ControlMode.Pointer}
           fitView
         >
           <Background gap={[14, 14]} size={2} color="#E4E5E7" />
@@ -289,7 +337,9 @@ function Flow(props: FlowProps) {
             />
           )}
           <Operator />
-          {toolbar}
+          <Panel className={toolbar ? '' : 'top-2'} />
+          <Header toolbar={toolbar} />
+          <HelpLine />
         </ReactFlow>
       </div>
     </EventEmitterContextProvider>

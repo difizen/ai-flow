@@ -1,6 +1,7 @@
 import { VariableForm } from '@/components/VariableForm/index';
 import type { NodeType } from '@/interfaces/flow';
 
+import React from 'react';
 import { NodeWrapper } from '../NodeWrapper/index';
 
 const StartNode = (props: NodeType) => {
@@ -13,9 +14,7 @@ const StartNode = (props: NodeType) => {
         showRequired={false}
         dynamic={false}
         values={data.config?.outputs || []}
-        onChange={(values) => {
-          //
-        }}
+        onChange={(values) => {}}
       />
     </NodeWrapper>
   );

@@ -1,5 +1,4 @@
-import type { ReactFlowJsonObject, XYPosition } from '@xyflow/react';
-import type { Node } from '@xyflow/react';
+import type { Node, ReactFlowJsonObject } from '@xyflow/react';
 
 export type NodeTypes =
   | 'start'
@@ -92,6 +91,7 @@ export interface NodeDataType extends Record<string, unknown> {
   description?: string;
   config?: NodeDataConfigType;
   folded?: boolean;
+  edited?: boolean;
 }
 
 export type NodeType = Node<NodeDataType>;
@@ -142,4 +142,28 @@ export interface ConditionBranch {
       content: SchemaValueType;
     };
   }[];
+}
+
+export enum NodePanelTypeEnum {
+  InNode = 'innode',
+  Panel = 'panel',
+}
+
+export type NodePanelType = NodePanelTypeEnum.InNode | NodePanelTypeEnum.Panel;
+
+export enum ControlMode {
+  Pointer = 'pointer',
+  Hand = 'hand',
+}
+
+export enum FlowHistoryType {
+  NodeAdd = 'NodeAdd',
+  NodeDrag = 'NodeDrag',
+  NodeChange = 'NodeChange',
+  NodeConnect = 'NodeConnect',
+  NodePaste = 'NodePaste',
+  NodeDelete = 'NodeDelete',
+
+  EdgeDelete = 'EdgeDelete',
+  NodeResize = 'NodeResize',
 }

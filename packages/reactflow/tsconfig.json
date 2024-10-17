@@ -12,9 +12,10 @@
     "paths": {
       "@@/*": [".dumi/tmp/*"],
       "@/*": ["src/*"],
+      "@alipay/ai-workflow": ["src"],
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
   }
 }
