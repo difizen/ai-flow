@@ -43,8 +43,7 @@ export const NodeWrapper = (props: {
   } = props;
   const { name: defaultName, description, icon: defaultIcon } = nodeProps.data;
   const nodePanel = useFlowStore((state) => state.nodePanel);
-  const handlerClasses =
-    'w-3 h-3 border-blue-500 rounded-full border-2 bg-white';
+  const handlerClasses = 'w-[8px] h-[8px] bg-blue-500 rounded-full';
 
   const setNodeFolded = useFlowStore((state) => state.setNodeFolded);
 
