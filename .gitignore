@@ -1,0 +1,20 @@
+# tools
+node_modules
+coverage
+config.local.ts
+.dumi/tmp
+.dumi/tmp-test
+.dumi/tmp-production
+.idea
+.vscode
+.node
+.history
+.DS_Store
+
+# library assets
+dist
+lib
+es
+icons
+assets.json
+package-lock.json
