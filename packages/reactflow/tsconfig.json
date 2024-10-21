@@ -10,7 +10,6 @@
     "declaration": true,
     "baseUrl": "./",
     "paths": {
-      "@@/*": [".dumi/tmp/*"],
       "@/*": ["src/*"],
       "@alipay/ai-workflow": ["src"],
     },

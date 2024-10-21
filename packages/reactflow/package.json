@@ -1,86 +1,26 @@
 {
-  "name": "@alipay/ai-workflow",
+  "name": "ai-flow",
   "version": "0.0.0",
-  "description": "A library project powered by bigfish-library",
-  "repository": {
-    "type": "git",
-    "url": "https://code.alipay.com/ai-platform/ai-workflow"
-  },
-  "author": "xujianfeng.xjf",
-  "module": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "icons",
-    "LEGAL.md",
-    "assets.json"
+  "private": true,
+  "description": "Scalable, out-of-the-box, agent-oriented flow",
+  "keywords": [
+    "ai",
+    "workflow",
+    "flow",
+    "ai flow",
+    "ai workflow",
+    "ai-flow",
+    "ai-workflow"
   ],
+  "repository": "git@github.com:difizen/ai-flow.git",
+  "license": "MIT",
   "scripts": {
-    "build": "bigfish-lib build",
-    "build:watch": "bigfish-lib build -w",
-    "ci": "tnpm run lint && jest --coverage",
-    "cov": "jest --coverage",
-    "create": "bigfish-lib create",
-    "deploy": "bigfish-lib deploy",
-    "dev": "bigfish-lib doc dev",
-    "doctor": "bigfish-lib doctor",
-    "lint": "bigfish-lib lint",
-    "prepare": "bigfish-lib setup && husky install",
-    "prepublishOnly": "bigfish-lib prepublish",
-    "pull": "bigfish-lib pull",
-    "start": "tnpm run dev",
-    "tailwind": "bigfish g tailwindcss",
-    "test": "jest --watch-all"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "lint-staged": {
-    "*.{md,json}": [
-      "prettier --cache --write --no-error-on-unmatched-pattern"
-    ],
-    "*.{js,jsx}": [
-      "bigfish-lib lint --fix --eslint-only",
-      "prettier --cache --write"
-    ],
-    "*.{css,less}": [
-      "bigfish-lib lint --fix --stylelint-only",
-      "prettier --cache --write"
-    ],
-    "*.{ts,tsx}": [
-      "bigfish-lib lint --fix --eslint-only",
-      "prettier --cache --parser=typescript --write"
-    ]
-  },
-  "dependencies": {
-    "@ant-design/icons": "^5.5.1",
-    "@dagrejs/dagre": "^1.1.4",
-    "@floating-ui/react": "^0.26.24",
-    "@headlessui/react": "^2.1.9",
-    "@lexical/code": "^0.17.1",
-    "@lexical/react": "^0.17.1",
-    "@lexical/text": "^0.17.1",
-    "@lexical/utils": "^0.17.1",
-    "@remixicon/react": "^4.2.0",
-    "@types/json-schema": "^7.0.15",
-    "@xyflow/react": "^12.3.1",
-    "ahooks": "^3.8.1",
-    "antd": "^5.21.3",
-    "classnames": "^2.5.1",
-    "immer": "^10.1.1",
-    "js-yaml": "^4.1.0",
-    "lexical": "^0.17.1",
-    "lodash": "^4.17.21",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-hotkeys-hook": "^4.5.1",
-    "short-unique-id": "^5.2.0",
-    "styled-components": "^6.1.13",
-    "tailwind-merge": "^2.5.3",
-    "uuid": "^10.0.0",
-    "zustand": "^4.5.5"
+    "build": "turbo build",
+    "clean": "turbo clean",
+    "dev": "turbo dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check"
   },
   "devDependencies": {
     "@types/classnames": "^2.3.1",
@@ -90,35 +30,23 @@
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "latest",
+    "father": "4.3.1",
     "jest": "^29.7.0",
+    "nx": "^16.10.0",
+    "pnpm": "^8.15.6",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "rollup": "^4.18.0",
+    "stylelint": "^14.16.1",
     "tailwindcss": "^3.4.13",
     "ts-jest": "^29.2.5",
+    "turbo": "^2.0.3",
     "typescript": "^5.6.3"
   },
-  "peerDependencies": {
-    "antd": "^5.0.0",
-    "react": ">=16.9.0"
-  },
-  "optionalDependencies": {
-    "node-bin-darwin-arm64": "16",
-    "node-darwin-x64": "16",
-    "node-linux-arm64": "16",
-    "node-linux-x64": "16",
-    "node-win-x64": "16",
-    "node-win-x86": "16"
-  },
-  "engines": {
-    "install-node": "16"
-  },
-  "publishConfig": {
-    "registry": "https://registry.antgroup-inc.cn"
-  },
-  "ci": {
-    "type": "aci"
-  },
-  "dumiAssets": "assets.json",
-  "tnpm": {
-    "mode": "npm"
-  },
-  "yuyanId": "180020010101322476"
+  "packageManager": "pnpm@9.2.0"
 }
