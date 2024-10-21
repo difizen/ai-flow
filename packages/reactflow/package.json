@@ -1,5 +1,5 @@
 {
-  "name": "ai-flow",
+  "name": "@ai-flow/reactflow",
   "version": "0.0.0",
   "private": true,
   "description": "Scalable, out-of-the-box, agent-oriented flow",
@@ -14,15 +14,40 @@
   ],
   "repository": "git@github.com:difizen/ai-flow.git",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "build": "turbo build",
-    "clean": "turbo clean",
-    "dev": "turbo dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo lint",
-    "type-check": "turbo type-check"
+    "dev": "vite --mode development"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.5.1",
+    "@dagrejs/dagre": "^1.1.4",
+    "@floating-ui/react": "^0.26.24",
+    "@headlessui/react": "^2.1.9",
+    "@lexical/code": "^0.17.1",
+    "@lexical/react": "^0.17.1",
+    "@lexical/text": "^0.17.1",
+    "@lexical/utils": "^0.17.1",
+    "@remixicon/react": "^4.2.0",
+    "@types/json-schema": "^7.0.15",
+    "@xyflow/react": "^12.3.1",
+    "ahooks": "^3.8.1",
+    "antd": "^5.21.3",
+    "classnames": "^2.5.1",
+    "immer": "^10.1.1",
+    "js-yaml": "^4.1.0",
+    "lexical": "^0.17.1",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hotkeys-hook": "^4.5.1",
+    "short-unique-id": "^5.2.0",
+    "styled-components": "^6.1.13",
+    "tailwind-merge": "^2.5.3",
+    "uuid": "^10.0.0",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@nx/vite": "20.0.2",
     "@types/classnames": "^2.3.1",
     "@types/jest": "^29.5.13",
     "@types/js-yaml": "^4.0.9",
@@ -32,6 +57,7 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -45,8 +71,9 @@
     "stylelint": "^14.16.1",
     "tailwindcss": "^3.4.13",
     "ts-jest": "^29.2.5",
-    "turbo": "^2.0.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^4.2.4"
   },
   "packageManager": "pnpm@9.2.0"
 }

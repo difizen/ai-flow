@@ -1,4 +1,6 @@
 {
+  "extends": "../../tsconfig.base.json",
+  
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
@@ -11,10 +13,20 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@alipay/ai-workflow": ["src"],
+      "@ai-flow/reactflow": ["src"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false,
-    "noUnusedLocals": true,
-  }
+    "noUnusedLocals": true
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.storybook.json"
+    }
+  ]
 }

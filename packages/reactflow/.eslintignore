@@ -1,8 +1,5 @@
-dist
-es
-lib
-icons
-config
-.dumi/tmp
-.dumi/tmp-test
-.dumi/tmp-production
+**/dist/**/*.js
+**/dist/**/*.cjs
+**/dist/**/*.mjs
+
+tailwind.out.css

@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-set -e
-. "$(dirname -- "$0")/_/husky.sh"
-
-npx lint-staged
-npx bigfish-lib doctor

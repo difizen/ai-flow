@@ -7,7 +7,6 @@ import {
 import { Button, Checkbox, Collapse, Form, Input, Space } from 'antd';
 import { useEffect } from 'react';
 
-import React from 'react';
 import { SelectInNode } from '../AIBasic/SelectInNode/index';
 
 export interface VariableFormProps {
@@ -63,7 +62,7 @@ export const VariableForm = (props: VariableFormProps) => {
                             return {};
                           }
                           return item;
-                        }),
+                        })
                       );
                     }
                     return;

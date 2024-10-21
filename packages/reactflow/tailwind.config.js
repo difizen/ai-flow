@@ -4,7 +4,9 @@ module.exports = {
     './src/pages/**/*.tsx',
     './src/components/**/*.tsx',
     './src/layouts/**/*.tsx',
-    './blocks/**/*.tsx',
+    './src/blocks/**/*.tsx',
+    './src/**/*.{js,jsx,ts,tsx}',
+    './public/index.html',
   ],
   theme: {
     extend: {},

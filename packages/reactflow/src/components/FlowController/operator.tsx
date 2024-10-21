@@ -18,7 +18,6 @@ import { memo, type HTMLAttributes } from 'react';
 
 import { ControlMode } from '@/interfaces/flow';
 import { useFlowStore } from '@/stores/flowStore';
-import React from 'react';
 import { Popup } from '../AIBasic/Popup/index';
 import { TipPopup } from '../AIBasic/TipPopup/index';
 
@@ -44,7 +43,7 @@ export const HoverBlock = (props: HoverBlockProps) => {
         'flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer hover:bg-black/5',
         disabled ? 'cursor-not-allowed opacity-50' : '',
         selected && 'bg-blue-400/20 hover:bg-blue-400/20',
-        className,
+        className
       )}
     >
       <div className={selected ? 'text-blue-400 text:bg-blue-400' : ''}>
