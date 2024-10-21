@@ -9,7 +9,7 @@ export const PanelWrapper = (props: {
   return (
     <div
       className={classNames(
-        'w-[384px] mr-2 h-full bg-white z-0 shadow-lg border-[0.5px] rounded-2xl overflow-y-auto',
+        'w-[384px] mr-2 h-full bg-white z-0 shadow-lg rounded-2xl overflow-y-auto',
         className,
       )}
     >

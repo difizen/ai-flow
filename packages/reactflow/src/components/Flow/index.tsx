@@ -323,12 +323,12 @@ function Flow(props: FlowProps) {
           onDrop={onDrop}
           onDragOver={onDragOver}
           maxZoom={2}
-          minZoom={0.1}
+          minZoom={0.25}
           panOnDrag={controlMode === ControlMode.Hand}
           selectionOnDrag={controlMode === ControlMode.Pointer}
           fitView
         >
-          <Background gap={[14, 14]} size={2} color="#E4E5E7" />
+          <Background gap={[24, 24]} size={4} color="#f1f1f1" />
           {miniMap && (
             <MiniMap
               style={{

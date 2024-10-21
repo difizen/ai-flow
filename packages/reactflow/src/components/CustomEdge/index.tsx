@@ -27,7 +27,6 @@ export default function CustomEdge({
     setEdge(id, (edge) => {
       return {
         ...edge,
-        zIndex: selected ? 2 : 1,
         markerEnd: {
           type: MarkerType.Arrow,
           color: edgeColor,
