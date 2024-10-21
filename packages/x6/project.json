@@ -1,0 +1,19 @@
+{
+  "name": "x6",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/x6/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/x6",
+        "main": "packages/x6/src/index.ts",
+        "tsConfig": "packages/x6/tsconfig.lib.json",
+        "assets": ["packages/x6/*.md"]
+      }
+    }
+  }
+}

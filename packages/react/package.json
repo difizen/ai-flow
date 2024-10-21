@@ -1,0 +1,20 @@
+{
+  "name": "react",
+  "version": "0.0.1",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx vite build",
+    "setup": "npx vite build",
+    "dev": "npx vite"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "private": true,
+  "devDependencies": {
+    "@types/node-jose": "^1.1.13"
+  },
+  "packageManager": "pnpm@9.4.0"
+}

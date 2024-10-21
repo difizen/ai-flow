@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@ai-flow/package-a": ["package-a/src/index.ts"],
+      "@ai-flow/react": ["packages/react/src/index.ts"],
+      "@ai-flow/x6": ["packages/x6/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
