@@ -1,10 +1,8 @@
 # tools
 node_modules
+!node_modules/.modules.yaml
 coverage
 config.local.ts
-.dumi/tmp
-.dumi/tmp-test
-.dumi/tmp-production
 .idea
 .vscode
 .node

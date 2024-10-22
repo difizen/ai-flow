@@ -16,7 +16,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode development"
+    "dev": "vite --mode development",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
