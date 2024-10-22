@@ -1,0 +1,9 @@
+Upgrade:
+  label: Upgrade
+  permalink: /upgrade
+  description: Upgrade
+
+Bugfix:
+  label: Bugfix
+  permalink: /bugfix
+  description: Bugfix
