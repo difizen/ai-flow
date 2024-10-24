@@ -1,6 +1,7 @@
 import {
   ControlMode,
   NodePanelTypeEnum,
+  targetHandleType,
   type NodePanelType,
   type NodeType,
 } from '@/interfaces/flow';
@@ -21,6 +22,7 @@ import { addEdge, applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
 import { produce } from 'immer';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
+import { useFlowsManagerStore } from './flowsManagerStore';
 
 interface AdjacencyList {
   [key: string]: string[];
@@ -45,11 +47,11 @@ export interface FlowStoreType {
   setReactFlowInstance: (newState: ReactFlowInstance) => void;
   setNodes: (
     update: Node[] | ((oldState: Node[]) => Node[]),
-    skipSave?: boolean,
+    skipSave?: boolean
   ) => void;
   setEdges: (
     update: Edge[] | ((oldState: Edge[]) => Edge[]),
-    skipSave?: boolean,
+    skipSave?: boolean
   ) => void;
   setNode: (id: string, update: Node | ((oldState: Node) => Node)) => void;
   getNode: (id: string) => Node | undefined;
@@ -60,13 +62,13 @@ export interface FlowStoreType {
   getFlow: () => { nodes: Node[]; edges: Edge[]; viewport: Viewport };
   paste: (
     selection: { nodes: Node[]; edges: Edge[] },
-    position: { x: number; y: number; paneX?: number; paneY?: number },
+    position: { x: number; y: number; paneX?: number; paneY?: number }
   ) => void;
   findUpstreamNodes: (id: string) => Node[];
   lastCopiedSelection: { nodes: any; edges: any } | null;
   setLastCopiedSelection: (
     newSelection: { nodes: any; edges: any } | null,
-    isCrop?: boolean,
+    isCrop?: boolean
   ) => void;
   setNodeFolded: (id: string, folded: boolean) => void;
   nodeLinkMap: Record<string, Node[]>;
@@ -82,7 +84,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
   return {
     nodes: [],
     edges: [],
-    nodePanel: NodePanelTypeEnum.Panel,
+    nodePanel: NodePanelTypeEnum.InNode,
     setNodePanel: (panel: NodePanelType) => {
       set({ nodePanel: panel });
     },
@@ -198,7 +200,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
             return newChange;
           }
           return edge;
-        }),
+        })
       );
     },
     setNode: (id: string, change: Node | ((oldState: Node) => Node)) => {
@@ -212,7 +214,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
             return newChange;
           }
           return node;
-        }),
+        })
       );
     },
     setNodes: (change) => {
@@ -225,8 +227,8 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
         nodes: newChange,
       });
 
-      // const { autoSaveFlow } = useFlowsManagerStore.getState();
-      // autoSaveFlow?.();
+      const { autoSaveFlow } = useFlowsManagerStore.getState();
+      autoSaveFlow?.();
     },
     setEdges: (change) => {
       const newChange =
@@ -234,7 +236,11 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       set({
         edges: newChange,
       });
+      // calculate link map
       get().calculateNodeLinkMap();
+      // autosave the flow
+      const { autoSaveFlow } = useFlowsManagerStore.getState();
+      autoSaveFlow?.();
     },
     getNode: (id: string) => {
       return get().nodes.find((node) => node.id === id);
@@ -251,7 +257,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
             },
             type: 'custom',
           },
-          oldEdges,
+          oldEdges
         );
 
         return newEdges;
@@ -262,31 +268,34 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
         get().nodes.filter((node) =>
           typeof nodeId === 'string'
             ? node.id !== nodeId
-            : !nodeId.includes(node.id),
-        ),
+            : !nodeId.includes(node.id)
+        )
+      );
+
+      get().setEdges(
+        get().edges.filter((edge) =>
+          typeof nodeId === 'string'
+            ? edge.source !== nodeId && edge.target !== nodeId
+            : !nodeId.includes(edge.source) && !nodeId.includes(edge.target)
+        )
       );
     },
+
     deleteEdge: (edgeId) => {
       get().setEdges(
         get().edges.filter((edge) =>
           typeof edgeId === 'string'
             ? edge.id !== edgeId
-            : !edgeId.includes(edge.id),
-        ),
+            : !edgeId.includes(edge.id)
+        )
       );
     },
-    paste: (
-      selection: { nodes: Node[]; edges: Edge[] },
-      position: XYPosition,
-    ) => {
-      //TODO:页面唯一节点检测
-      // if (
-      //   selection.nodes.some((node) => node.data.type === 'ChatInput') &&
-      //   checkChatInput(get().nodes)
-      // ) {
+    paste: (selection: { nodes: Node[]; edges: Edge[] }, position) => {
+      // TODO:页面唯一节点检测
+      // if (selection.nodes.some((node) => node.data.type === 'start')) {
       //   useAlertStore.getState().setErrorData({
       //     title: 'Error pasting components',
-      //     list: ['You can only have one ChatInput component in the flow'],
+      //     list: ['You can only have one Start Node in the flow'],
       //   });
       //   return;
       // }
@@ -305,25 +314,16 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
         }
       });
 
-      const insidePosition = (position as PanePosition).paneX
-        ? {
-            x: (position as PanePosition).paneX + position.x,
-            y: (position as PanePosition).paneY! + position.y,
-          }
-        : get().reactFlowInstance !== null
-        ? get().reactFlowInstance!.screenToFlowPosition({
+      const insidePosition = position.paneX
+        ? { x: position.paneX + position.x, y: position.paneY + position.y }
+        : get().reactFlowInstance!.screenToFlowPosition({
             x: position.x,
             y: position.y,
-          })
-        : { x: 0, y: 0 };
+          });
 
       selection.nodes.forEach((node: Node) => {
-        // Generate a unique node ID
         const newId = getNodeId(node.data['type'] as string);
 
-        // idsMap[node.id] = newId;
-
-        // Create a new node object
         const newNode: NodeType = {
           id: newId,
           type: node.data['type'] as string,
@@ -336,6 +336,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
             id: newId,
           } as any,
         };
+
         // updateGroupRecursion(
         //   newNode,
         //   selection.edges,
@@ -352,10 +353,10 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       get().setNodes(newNodes);
 
       // selection.edges.forEach((edge: Edge) => {
-      //   let source = idsMap[edge.source];
-      //   let target = idsMap[edge.target];
+      //   let source = edge.source;
+      //   let target = edge.target;
       //   const sourceHandleObject: sourceHandleType = scapeJSONParse(
-      //     edge.sourceHandle!,
+      //     edge.sourceHandle!
       //   );
       //   let sourceHandle = scapedJSONStringfy({
       //     ...sourceHandleObject,
@@ -365,7 +366,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
 
       //   edge.data.sourceHandle = sourceHandleObject;
       //   const targetHandleObject: targetHandleType = scapeJSONParse(
-      //     edge.targetHandle!,
+      //     edge.targetHandle!
       //   );
       //   let targetHandle = scapedJSONStringfy({
       //     ...targetHandleObject,
@@ -384,7 +385,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
       //       data: cloneDeep(edge.data),
       //       selected: false,
       //     },
-      //     newEdges.map((edge) => ({ ...edge, selected: false })),
+      //     newEdges.map((edge) => ({ ...edge, selected: false }))
       //   );
       // });
       // get().setEdges(newEdges);
@@ -394,10 +395,10 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
     setLastCopiedSelection: (newSelection, isCrop = false) => {
       if (isCrop && newSelection) {
         const nodesIdsSelected = newSelection.nodes.map(
-          (node: Node) => node.id,
+          (node: Node) => node.id
         );
         const edgesIdsSelected = newSelection.edges.map(
-          (edge: Edge) => edge.id,
+          (edge: Edge) => edge.id
         );
 
         nodesIdsSelected.forEach((id: string) => {
@@ -409,10 +410,10 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
         });
 
         const newNodes = get().nodes.filter(
-          (node) => !nodesIdsSelected.includes(node.id),
+          (node) => !nodesIdsSelected.includes(node.id)
         );
         const newEdges = get().edges.filter(
-          (edge) => !edgesIdsSelected.includes(edge.id),
+          (edge) => !edgesIdsSelected.includes(edge.id)
         );
 
         set({ nodes: newNodes, edges: newEdges });
@@ -428,7 +429,6 @@ export const useFlowStore = create<FlowStoreType>((set, get) => {
           else node.data.edited = false;
         });
       });
-
       get().setNodes(newNodes);
     },
   };

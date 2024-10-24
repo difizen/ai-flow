@@ -5,6 +5,7 @@ import { memo } from 'react';
 
 import { CascaderInNode } from '../AIBasic/CascaderInNode/index';
 import { SelectInNode } from '../AIBasic/SelectInNode/index';
+import React from 'react';
 
 export const ReferenceSelectRaw = (props: {
   value?: SchemaValueType;
@@ -14,10 +15,10 @@ export const ReferenceSelectRaw = (props: {
   const { value, onChange, refOptions } = props;
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-[100%]">
       <SelectInNode
         value={value?.type || 'reference'}
-        style={{ width: 80 }}
+        style={{ width: '30%' }}
         onChange={(val: ValueType) =>
           onChange?.({
             type: val,
@@ -31,7 +32,7 @@ export const ReferenceSelectRaw = (props: {
 
       {value?.type === 'value' ? (
         <Input
-          style={{ width: 120 }}
+          style={{ width: '70%' }}
           value={value?.content}
           onChange={(e) =>
             onChange?.({
@@ -42,7 +43,7 @@ export const ReferenceSelectRaw = (props: {
         />
       ) : (
         <CascaderInNode
-          style={{ width: 120 }}
+          style={{ width: '70%' }}
           value={value?.content || []}
           onChange={(val: (string | number | null)[]) =>
             onChange?.({

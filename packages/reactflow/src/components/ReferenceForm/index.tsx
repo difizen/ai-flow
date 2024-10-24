@@ -6,6 +6,7 @@ import { memo, useEffect } from 'react';
 import { CollapseWrapper } from '../AIBasic/index';
 import { HoverBlock } from '../FlowController/operator';
 import { ReferenceSelect } from '../ReferenceSelect/index';
+import React from 'react';
 
 export interface RefrenceFormProps {
   label: string;
@@ -22,7 +23,6 @@ export const ReferenceFormRaw = (props: RefrenceFormProps) => {
 
   useEffect(() => {
     form.setFieldValue('variables', value || []);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const options =
@@ -51,7 +51,7 @@ export const ReferenceFormRaw = (props: RefrenceFormProps) => {
                 return {};
               }
               return item;
-            }),
+            })
           );
         }}
       >
@@ -83,7 +83,7 @@ export const ReferenceFormRaw = (props: RefrenceFormProps) => {
                   <Form.Item
                     {...restField}
                     name={[name, 'value']}
-                    className="w-[200px]"
+                    className="w-[240px]"
                   >
                     <ReferenceSelect refOptions={options} />
                   </Form.Item>

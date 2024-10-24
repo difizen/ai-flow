@@ -2,6 +2,7 @@ import { CollapseWrapper, OutputVariable } from '@/components/AIBasic';
 import { ReferenceForm } from '@/components/ReferenceForm';
 import type { BasicSchema, NodeDataType } from '@/interfaces/flow';
 import { useFlowStore } from '@/stores/flowStore';
+
 import { useKnowledgeStore } from '@/stores/useKnowledgeStore';
 import React from 'react';
 

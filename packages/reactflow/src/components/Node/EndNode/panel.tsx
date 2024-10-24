@@ -3,6 +3,7 @@ import { PromptEditor } from '@/components/AIBasic/PromptEditor/index';
 import { ReferenceForm } from '@/components/ReferenceForm/index';
 import type { BasicSchema, NodeDataType } from '@/interfaces/flow';
 import { useFlowStore } from '@/stores/flowStore';
+
 import { useMemo } from 'react';
 
 import React from 'react';
@@ -13,7 +14,7 @@ export const EndPanel = (props: { data: NodeDataType }) => {
   const setNode = useFlowStore((state) => state.setNode);
   const upstreamNodes = useMemo(
     () => nodeLinkMap[data.id],
-    [nodeLinkMap, data.id],
+    [nodeLinkMap, data.id]
   );
   return (
     <>

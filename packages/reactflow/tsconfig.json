@@ -12,8 +12,8 @@
     "declaration": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "@ai-flow/reactflow": ["src"]
+      "@ai-flow/reactflow": ["src"],
+      "@/*": ["src/*"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false,

@@ -8,6 +8,7 @@ import { Button, Checkbox, Collapse, Form, Input, Space } from 'antd';
 import { useEffect } from 'react';
 
 import { SelectInNode } from '../AIBasic/SelectInNode/index';
+import React from 'react';
 
 export interface VariableFormProps {
   label: string;
@@ -75,7 +76,7 @@ export const VariableForm = (props: VariableFormProps) => {
                   {() => (
                     <>
                       <Space style={{ display: 'flex' }} align="baseline">
-                        <Form.Item className="w-[240px]">变量名</Form.Item>
+                        <Form.Item className="w-[120px]">变量名</Form.Item>
                         <Form.Item className="w-[200px]">变量类型</Form.Item>
                         {/* <Form.Item className="w-[240px]">变量描述</Form.Item> */}
                         {showRequired && (
@@ -98,7 +99,7 @@ export const VariableForm = (props: VariableFormProps) => {
                         <Form.Item
                           {...restField}
                           name={[name, 'name']}
-                          className="w-[240px]"
+                          className="w-[120px]"
                           rules={[
                             { required: true, message: '变量名不可为空' },
                           ]}

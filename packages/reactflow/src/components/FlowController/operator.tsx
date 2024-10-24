@@ -20,6 +20,7 @@ import { ControlMode } from '@/interfaces/flow';
 import { useFlowStore } from '@/stores/flowStore';
 import { Popup } from '../AIBasic/Popup/index';
 import { TipPopup } from '../AIBasic/TipPopup/index';
+import React from 'react';
 
 interface HoverBlockProps extends HTMLAttributes<HTMLDivElement> {
   tooltip?: React.ReactNode;

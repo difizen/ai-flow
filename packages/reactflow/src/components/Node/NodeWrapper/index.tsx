@@ -12,6 +12,7 @@ import {
 import { Handle, Position } from '@xyflow/react';
 import React from 'react';
 import { PanelComponentMap } from '..';
+import { useFlowsManagerStore } from '@/stores/flowsManagerStore';
 
 export const NodeWrapper = (props: {
   nodeProps: NodeType;
@@ -43,9 +44,14 @@ export const NodeWrapper = (props: {
   } = props;
   const { name: defaultName, description, icon: defaultIcon } = nodeProps.data;
   const nodePanel = useFlowStore((state) => state.nodePanel);
+  const deleteNode = useFlowStore((state) => state.deleteNode);
+  const takeSnapshot = useFlowsManagerStore((state) => state.takeSnapshot);
+
   const handlerClasses = 'w-[8px] h-[8px] bg-blue-500 rounded-full';
 
   const setNodeFolded = useFlowStore((state) => state.setNodeFolded);
+  const getNode = useFlowStore((state) => state.getNode);
+  const paste = useFlowStore((state) => state.paste);
 
   const Panel = PanelComponentMap[nodeProps.type!];
 
@@ -59,7 +65,7 @@ export const NodeWrapper = (props: {
         nodeProps.selected || nodeProps.data.edited
           ? 'border-blue-500 shadow-2xl'
           : 'border-transparent',
-        className,
+        className
       )}
       onClick={onClick}
     >
@@ -77,7 +83,7 @@ export const NodeWrapper = (props: {
                   nodeProps.data.id,
                   nodeProps.data.folded === undefined
                     ? true
-                    : !nodeProps.data.folded,
+                    : !nodeProps.data.folded
                 )
               }
             >
@@ -102,11 +108,30 @@ export const NodeWrapper = (props: {
               <div className="z-[9] p-1 bg-white rounded-lg shadow-sm border-[0.5px] border-gray-200 w-[126px]">
                 <div
                   className="flex items-center justify-between h-8 px-3 rounded-lg hover:bg-gray-50 cursor-pointer text-[13px] text-gray-600"
-                  onClick={() => {}}
+                  onClick={() => {
+                    const node = getNode(nodeProps.data.id);
+                    if (!node) return;
+                    takeSnapshot();
+                    paste(
+                      { nodes: [node], edges: [] },
+                      {
+                        x: node[0].position.x,
+                        y: node[0].position.y,
+                        paneX: 100,
+                        paneY: 100,
+                      }
+                    );
+                  }}
                 >
                   复制
                 </div>
-                <div className="flex items-center justify-between h-8 px-3 rounded-lg hover:bg-red-50 cursor-pointer text-[13px] text-gray-600 hover:text-red-600">
+                <div
+                  onClick={() => {
+                    takeSnapshot();
+                    deleteNode(nodeProps.id);
+                  }}
+                  className="flex items-center justify-between h-8 px-3 rounded-lg hover:bg-red-50 cursor-pointer text-[13px] text-gray-600 hover:text-red-600"
+                >
                   删除
                 </div>
               </div>
@@ -118,7 +143,7 @@ export const NodeWrapper = (props: {
           </PopoverInNode>
         </div>
       )}
-      {/* <NodeStatus status={'success' as any} runDuration={1020} /> */}
+
       <div className="flex w-full items-center justify-between gap-8 rounded-t-lg">
         <div className="flex items-center justify-between">
           {(defaultIcon || icon) && (
@@ -172,7 +197,7 @@ export const NodeWrapper = (props: {
       {!nodeProps.data.folded && hasNodeContent && (
         <div className="pt-2">
           {children}
-          {nodePanel === NodePanelTypeEnum.InNode && (
+          {nodePanel === NodePanelTypeEnum.InNode && Panel && (
             <Panel data={nodeProps.data} />
           )}
         </div>

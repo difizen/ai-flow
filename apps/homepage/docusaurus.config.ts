@@ -68,7 +68,6 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
-
     navbar: {
       title: 'AI Flow',
       logo: {
@@ -82,7 +81,13 @@ const config: Config = {
           position: 'left',
           label: 'Tutorial',
         },
+
         { to: '/blog', label: 'Blog', position: 'left' },
+        {
+          position: 'left',
+          label: 'Examples',
+          to: '/examples',
+        },
         {
           type: 'localeDropdown',
           position: 'right',
@@ -127,16 +132,27 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/difizen/ai-flow',
             },
           ],
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Difizen, Inc.`,
     },
+    themes: ['@docusaurus/theme-live-codeblock'],
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+    plugins: ['@docusaurus/theme-live-codeblock'],
+    themeConfig: {
+      liveCodeBlock: {
+        /**
+         * 实时效果显示的位置，在编辑器上方还是下方
+         * 可选参数："top" | "bottom"
+         */
+        playgroundPosition: 'bottom',
+      },
     },
   } satisfies Preset.ThemeConfig,
 };

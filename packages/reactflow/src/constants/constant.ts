@@ -97,7 +97,7 @@ export const defaultShortcuts = [
   },
 ];
 
-export const SAVE_DEBOUNCE_TIME = 300;
+export const SAVE_DEBOUNCE_TIME = 2000;
 
 export const DefaultTemplateNodes: NodeDataType[] = [
   {

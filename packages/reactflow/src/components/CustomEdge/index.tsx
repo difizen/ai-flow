@@ -20,7 +20,8 @@ export default function CustomEdge({
   markerEnd,
   selected,
 }: EdgeProps) {
-  const { setEdge } = useFlowStore();
+  const setEdge = useFlowStore((state) => state.setEdge);
+
   const edgeColor = selected ? EdgeColor.Selected : EdgeColor.Default;
 
   useEffect(() => {

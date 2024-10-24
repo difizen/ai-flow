@@ -3,7 +3,7 @@ import {
   Flow,
   NodesPanel,
   useFlowStore,
-} from '@ai-flow/reactflow';
+} from '../../index';
 import { Button } from 'antd';
 import React, { useEffect } from 'react';
 
