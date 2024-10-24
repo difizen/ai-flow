@@ -17,6 +17,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@ai-flow/reactflow': path.resolve(__dirname, 'src'),
       '@': path.resolve(__dirname, 'src'),
     },
   },

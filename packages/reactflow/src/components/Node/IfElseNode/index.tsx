@@ -3,6 +3,7 @@ import type { NodeType } from '@/interfaces/flow';
 import { useFlowStore } from '@/stores/flowStore';
 
 import { NodeWrapper } from '../NodeWrapper/index';
+import React from 'react';
 
 const IfElseNode = (props: NodeType) => {
   const { data } = props;

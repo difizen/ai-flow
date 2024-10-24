@@ -17,7 +17,7 @@ export type HelpLineVerticalPosition = {
 export interface HelpLineStoreType {
   helpLineHorizontal?: HelpLineHorizontalPosition | undefined;
   setHelpLineHorizontal: (
-    helpLineHorizontal?: HelpLineHorizontalPosition,
+    helpLineHorizontal?: HelpLineHorizontalPosition
   ) => void;
   helpLineThreshold: number;
   setHelpLineThreshold: (helpLineThreshold: number) => void;
@@ -35,7 +35,7 @@ export const useHelpLine = create<HelpLineStoreType>((set, get) => {
     setHelpLineVertical: (helpLineVertical) => {
       set({ helpLineVertical });
     },
-    helpLineThreshold: 20,
+    helpLineThreshold: 30,
     setHelpLineThreshold: (helpLineThreshold) => {
       set({ helpLineThreshold });
     },

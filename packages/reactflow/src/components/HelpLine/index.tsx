@@ -12,7 +12,7 @@ const HelpLineHorizontal = memo(
 
     return (
       <div
-        className="absolute z-[9] border-t border-blue-400 border-dashed"
+        className="absolute z-[9] border-blue-400 border-dashed border-t-2"
         style={{
           top: top * zoom + y,
           left: left * zoom + x,
@@ -20,7 +20,7 @@ const HelpLineHorizontal = memo(
         }}
       />
     );
-  },
+  }
 );
 
 const HelpLineVertical = memo(
@@ -29,7 +29,7 @@ const HelpLineVertical = memo(
 
     return (
       <div
-        className="absolute z-[9] border-l border-blue-400 border-dashed"
+        className="absolute z-[9] border-blue-400 border-dashed border-l-2"
         style={{
           top: top * zoom + y,
           left: left * zoom + x,
@@ -37,7 +37,7 @@ const HelpLineVertical = memo(
         }}
       />
     );
-  },
+  }
 );
 
 const HelpLine = () => {

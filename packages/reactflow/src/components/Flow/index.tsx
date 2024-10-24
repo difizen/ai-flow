@@ -11,6 +11,7 @@ import isWrappedWithClass from '@/utils/wrappedClass';
 import type {
   Connection,
   Edge,
+  NodeMouseHandler,
   OnSelectionChangeParams,
   SelectionDragHandler,
 } from '@xyflow/react';
@@ -83,17 +84,17 @@ function Flow(props: FlowProps) {
   const onNodeDragEnd = useNodeInteractions((state) => state.onNodeDragEnd);
 
   const setReactFlowInstance = useFlowStore(
-    (state) => state.setReactFlowInstance,
+    (state) => state.setReactFlowInstance
   );
   const deleteNode = useFlowStore((state) => state.deleteNode);
   const deleteEdge = useFlowStore((state) => state.deleteEdge);
   const onConnect = useFlowStore((state) => state.onConnect);
 
   const setLastCopiedSelection = useFlowStore(
-    (state) => state.setLastCopiedSelection,
+    (state) => state.setLastCopiedSelection
   );
   const lastCopiedSelection = useFlowStore(
-    (state) => state.lastCopiedSelection,
+    (state) => state.lastCopiedSelection
   );
   const paste = useFlowStore((state) => state.paste);
   const undo = useFlowsManagerStore((state) => state.undo);
@@ -130,13 +131,14 @@ function Flow(props: FlowProps) {
     e.stopPropagation();
     (e as unknown as Event).stopImmediatePropagation();
     const selectedNode = nodes.filter((obj) => obj.selected);
+    console.log('🚀 ~ handleDuplicate ~ selectedNode:', selectedNode);
     if (selectedNode.length > 0) {
       paste(
         { nodes: selectedNode, edges: [] },
         {
           x: position.current.x,
           y: position.current.y,
-        },
+        }
       );
     }
   }
@@ -208,7 +210,7 @@ function Flow(props: FlowProps) {
       takeSnapshot();
       onConnect(params);
     },
-    [takeSnapshot, onConnect],
+    [takeSnapshot, onConnect]
   );
 
   const onDrop = useCallback(
@@ -219,7 +221,7 @@ function Flow(props: FlowProps) {
         try {
           // Extract the data from the drag event and parse it as a JSON object
           const data: { type: string; node?: NodeType } = JSON.parse(
-            event.dataTransfer.getData('nodedata'),
+            event.dataTransfer.getData('nodedata')
           );
 
           const newId = getNodeId(data.type);
@@ -236,7 +238,7 @@ function Flow(props: FlowProps) {
           };
           paste(
             { nodes: [newNode], edges: [] },
-            { x: event.clientX, y: event.clientY },
+            { x: event.clientX, y: event.clientY }
           );
         } catch (error) {
           console.error(error);
@@ -244,7 +246,7 @@ function Flow(props: FlowProps) {
       }
     },
     // Specify dependencies for useCallback
-    [takeSnapshot, paste],
+    [takeSnapshot, paste]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -266,7 +268,7 @@ function Flow(props: FlowProps) {
     (flow: OnSelectionChangeParams): void => {
       setLastSelection(flow);
     },
-    [],
+    []
   );
 
   const onSelectionDragStart: SelectionDragHandler = useCallback(() => {
@@ -289,8 +291,9 @@ function Flow(props: FlowProps) {
 
   const autoSaving = useFlowsManagerStore((state) => state.autoSaving);
   const initializeAutoSaveFlow = useFlowsManagerStore(
-    (state) => state.initializeAutoSaveFlow,
+    (state) => state.initializeAutoSaveFlow
   );
+
   useEffect(() => {
     if (initialGraph) {
       initFlow(initialGraph);
@@ -299,6 +302,11 @@ function Flow(props: FlowProps) {
       initializeAutoSaveFlow();
     }
   }, []);
+
+  const handleNodeClick = useCallback<NodeMouseHandler>(
+    (_, node) => handleNodeEdited(node.id),
+    [handleNodeEdited]
+  );
 
   return (
     <EventEmitterContextProvider>
@@ -315,7 +323,7 @@ function Flow(props: FlowProps) {
           onSelectionChange={onSelectionChange}
           onSelectionDragStart={onSelectionDragStart}
           onConnect={onConnectMod}
-          onNodeClick={(_, node) => handleNodeEdited(node.id)}
+          onNodeClick={handleNodeClick}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           disableKeyboardA11y={true}

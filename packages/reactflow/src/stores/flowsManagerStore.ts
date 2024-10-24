@@ -130,7 +130,7 @@ export const useFlowsManagerStore = create<FlowsManagerStoreType>(
         if (pastLength > 0) {
           past = past.slice(
             pastLength - defaultOptions.maxHistorySize + 1,
-            pastLength,
+            pastLength
           );
 
           past.push(newState);
@@ -183,5 +183,5 @@ export const useFlowsManagerStore = create<FlowsManagerStoreType>(
         }
       },
     };
-  },
+  }
 );
