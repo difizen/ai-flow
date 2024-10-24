@@ -1,6 +1,6 @@
 ## Out-of-the-box Agent Workflow solutions
 
-![cover-v5-optimized](./assets/image.png)
+![cover-v5-optimized](./packages/reactflow/assets/image.png)
 
 <p align="center">
   <a href="./README.md"><img alt="README in English" src="https://img.shields.io/badge/English-d9d9d9"></a>
