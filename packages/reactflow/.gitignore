@@ -1,0 +1,18 @@
+# tools
+node_modules
+!node_modules/.modules.yaml
+coverage
+config.local.ts
+.idea
+.vscode
+.node
+.history
+.DS_Store
+
+# library assets
+dist
+lib
+es
+icons
+assets.json
+package-lock.json

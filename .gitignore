@@ -1,20 +1,48 @@
-# tools
-node_modules
-coverage
-config.local.ts
-.dumi/tmp
-.dumi/tmp-test
-.dumi/tmp-production
-.idea
-.vscode
-.node
-.history
-.DS_Store
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# library assets
+# compiled output
 dist
-lib
-es
-icons
-assets.json
-package-lock.json
+tmp
+/out-tsc
+
+# dependencies
+node_modules
+!node_modules/.modules.yaml
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.nx/cache
+.nx/workspace-data
+
+**/vite.config.{js,ts,mjs,mts,cjs,cts}.timestamp*
+
+
+storybook-static
