@@ -25,11 +25,14 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'zh-Hans',
-    locales: ['zh-Hans', 'en'],
+    defaultLocale: 'en',
+    locales: ['en', 'zh-Hans'],
     localeConfigs: {
       en: {
         htmlLang: 'en-GB',
+      },
+      'zh-Hans': {
+        direction: 'rtl',
       },
       // You can omit a locale (e.g. fr) if you don't need to override the defaults
     },
@@ -83,11 +86,11 @@ const config: Config = {
         },
 
         { to: '/blog', label: 'Blog', position: 'left' },
-        {
-          position: 'left',
-          label: 'Examples',
-          to: '/examples',
-        },
+        // {
+        //   position: 'left',
+        //   label: 'Examples',
+        //   to: '/examples',
+        // },
         {
           type: 'localeDropdown',
           position: 'right',
@@ -106,7 +109,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro',
+              to: '/docs/quickstart',
             },
           ],
         },
